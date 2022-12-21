@@ -33,30 +33,32 @@
         Please note that pool maintenance and landscaping services, if
         applicable, are not listed, as those dates are tentative and may shift
         depending on weather and schedules.
-        </p>
+        </p><br><br>
 
         @if (empty($jobs))
             <h3>We currently do not have any jobs scheduled for next 30 days.</h3>
         @else
 
         @foreach ($jobs as $job)
-        {{$job['description']}}<br>
+        {{$loop->iteration}}) {{$job['description']}}<br>
         Date : {{$job['start_date']}}<br>
         Job Id : {{$job['number']}}<br><br>
         @endforeach
             
         @endif    
         
-        <br>
+        <br><br><br>
         
         <h3>OPEN ESTIMATES</h3>
         
         <p>Below is a summary and a list of all your open estimate(s) (if any).</p>
             
         @foreach ($estimates as $estimate)
-        Description : {{$estimate['description']}}<br>
-        Value : {{$estimate['total']}}<br>
-        Status : {{$estimate['status']}}<br><br>
+            @if (Carbon\Carbon::parse($estimate['created_at'])->gt('2022-10-01T00:00:00+00:00'))
+            {{$loop->iteration}}) Description : {{$estimate['description']}}<br>
+            Value : {{$estimate['total']}}<br>
+            Status : {{$estimate['status']}}<br><br>
+            @endif
         @endforeach
             
         <br>

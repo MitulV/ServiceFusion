@@ -4,6 +4,7 @@ use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,6 +17,12 @@ use Illuminate\Support\Facades\Http;
 */
 
 Route::get('/', function () {
+    
+    //  if(Carbon\Carbon::parse('2020-08-25T00:00:00+00:00')->gt('2020-10-01T00:00:00+00:00')){
+    //     return "yes";
+    // }else{
+    //     return "no";
+    // }
     return view('welcome');
 });
 

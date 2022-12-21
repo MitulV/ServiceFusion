@@ -46,6 +46,9 @@ class HomeController extends Controller
             $agent=$customer['agent'];
             $email='darshil@admin.com';
             $this->getJobs($customerName,$email,$agent,$accessToken);  
+            // if($customerName=="Michael and Hillary Riccobene"){
+            //     $this->getJobs($customerName,$email,$agent,$accessToken);  
+            // }
             
         }  
         return ['status'=>'ok'];
