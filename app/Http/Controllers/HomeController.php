@@ -38,7 +38,7 @@ class HomeController extends Controller
     public function getCustomers(Request $request){
        
         $accessToken=$this->refreshAccessToken($request);
-        $url="https://api.servicefusion.com/v1/customers?per-page=50&filters[tags]=member"; 
+        $url="https://api.servicefusion.com/v1/customers?per-page=50&filters[tags]=member&sort=-created_at"; 
         $response=CommonUtil::callAPI($url,[],'GET',$accessToken); 
   
         foreach ($response['items'] as $customer) {
@@ -62,8 +62,13 @@ class HomeController extends Controller
         
         $response = json_decode(Http::get($url), true);    
         $jobs=$response && $response['items'] ? $response['items'] : [];
-       
-        $this->getEstimates($customerName,$email,$jobs,$agent,$accessToken);
+        $jobs_new=[];
+       foreach($jobs as $job) { 
+        if(!str_contains(strtolower($job['description']), 'credit')){
+            array_push($jobs_new,$job);
+        }   
+       }
+        $this->getEstimates($customerName,$email,$jobs_new,$agent,$accessToken);
     }
 
     public function getEstimates($customerName,$email,$jobs,$agent,$accessToken){

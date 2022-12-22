@@ -41,8 +41,8 @@
 
         @foreach ($jobs as $job)
         {{$loop->iteration}}) {{$job['description']}}<br>
-        Date : {{$job['start_date']}}<br>
-        Job Id : {{$job['number']}}<br><br>
+        Date : {{Carbon\Carbon::parse($job['start_date'])->format('m-d-Y') }}<br>
+        Duration : {{$job['duration']}}<br>
         @endforeach
             
         @endif    
@@ -51,7 +51,7 @@
         
         <h3>OPEN ESTIMATES</h3>
         
-        <p>Below is a summary and a list of all your open estimate(s) (if any).</p>
+        <p>Please find below a summary of your open estimates at this time.</p>
             
         @foreach ($estimates as $estimate)
             @if (Carbon\Carbon::parse($estimate['created_at'])->gt('2022-10-01T00:00:00+00:00'))
