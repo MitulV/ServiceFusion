@@ -7,7 +7,6 @@ use App\Mail\sendFusionData;
 use App\Models\SFToken;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Http;
 
@@ -58,7 +57,7 @@ class HomeController extends Controller
         $lte=Carbon::now()->addDays(30)->toDateString(); 
         $gte=Carbon::now()->toDateString();
         
-        $url="https://api.servicefusion.com/v1/jobs?filters[customer_name]=$customerName&filters[start_date][lte]=$lte&filters[start_date][gte]=$gte&access_token=$accessToken";
+        $url="https://api.servicefusion.com/v1/jobs?filters[customer_name]=$customerName&filters[start_date][lte]=$lte&filters[start_date][gte]=$gte&access_token=$accessToken&filters[status]=Scheduled";
         
         $response = json_decode(Http::get($url), true);    
         $jobs=$response && $response['items'] ? $response['items'] : [];
@@ -75,7 +74,14 @@ class HomeController extends Controller
         $url="https://api.servicefusion.com/v1/estimates?filters[customer_name]=$customerName&filters[status]=Estimate Provided&access_token=$accessToken";
         $response = json_decode(Http::get($url), true); 
         $estimates=$response && $response['items'] ? $response['items'] : [];
-        $this->sendEmail($customerName,$email,$jobs,$agent,$estimates);
+        $estimates_new=[];
+        foreach($estimates as $estimate) 
+        { 
+            if(Carbon::parse($estimate['created_at'])->gt('2022-10-01T00:00:00+00:00')){
+                array_push($estimates_new,$estimate);
+            }   
+        }
+        $this->sendEmail($customerName,$email,$jobs,$agent,$estimates_new);
     }
 
     public function sendEmail($customerName,$email,$jobs,$agent,$estimates){

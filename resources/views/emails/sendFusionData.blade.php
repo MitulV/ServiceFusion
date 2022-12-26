@@ -16,11 +16,8 @@
         
     <h3>ON DEMAND PROJECTS</h3>
         
-    <p>The link below provides information on the status of your outstanding
-        on demand projects. Please let us know if you have any questions,
-        input or additional projects you’d like for us to add. You can also
-        bookmark this link and be able to reference it anytime – we will keep
-        it updated throughout the week.
+    <p>
+        The link below provides information on the status of your outstanding on demand projects. Please let us know if you have any questions, input, or additional projects you’d like for us to add. You can also bookmark this link and be able to reference it anytime – we will keep it updated throughout the week.
     </p>   
     
     <h3>On Demand Projects</h3>
@@ -42,7 +39,9 @@
         @foreach ($jobs as $job)
         {{$loop->iteration}}) {{$job['description']}}<br>
         Date : {{Carbon\Carbon::parse($job['start_date'])->format('m-d-Y') }}<br>
-        Duration : {{$job['duration']}}<br>
+        Tech Assigned : - <br>
+        Arrival Time Window : {{$job['time_frame_promised_start']}} to {{$job['time_frame_promised_end']}}<br>
+        Duration : {{Carbon\CarbonInterval::seconds($job['duration'])->cascade()->forHumans()}}<br><br>
         @endforeach
             
         @endif    
@@ -52,14 +51,18 @@
         <h3>OPEN ESTIMATES</h3>
         
         <p>Please find below a summary of your open estimates at this time.</p>
+
+        @if (empty($estimates))
+            <h3>we currently do not have any estimates.</h3>
+        @else
             
-        @foreach ($estimates as $estimate)
-            @if (Carbon\Carbon::parse($estimate['created_at'])->gt('2022-10-01T00:00:00+00:00'))
-            {{$loop->iteration}}) Description : {{$estimate['description']}}<br>
-            Value : {{$estimate['total']}}<br>
-            Status : {{$estimate['status']}}<br><br>
-            @endif
-        @endforeach
+            @foreach ($estimates as $estimate)
+                {{$loop->iteration}}) Description : {{$estimate['description']}}<br>
+                Value : {{$estimate['total']}}<br>
+                Status : {{$estimate['status']}}<br><br>
+            @endforeach
+
+        @endif  
             
         <br>
         

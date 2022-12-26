@@ -18,12 +18,8 @@ use Illuminate\Support\Facades\Http;
 
 Route::get('/', function () {
     
-    //  if(Carbon\Carbon::parse('2020-08-25T00:00:00+00:00')->gt('2020-10-01T00:00:00+00:00')){
-    //     return "yes";
-    // }else{
-    //     return "no";
-    // }
-    return view('welcome');
+    //return Carbon\CarbonInterval::seconds(7261)->cascade()->forHumans();
+    //return view('welcome');
 });
 
 Route::get('/customers',[HomeController::class,'getCustomers']);
