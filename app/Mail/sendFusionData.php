@@ -18,12 +18,14 @@ class sendFusionData extends Mailable
      *
      * @return void
      */
-    public function __construct($customerName,$jobs,$estimates,$agent)
+    public function __construct($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames)
     {
         $this->customerName = $customerName;
         $this->jobs = $jobs;
         $this->estimates = $estimates;
         $this->agent = $agent;
+        $this->mondayURL=$mondayURL;
+        $this->fnames=$fnames;
     }
 
     /**
@@ -51,7 +53,9 @@ class sendFusionData extends Mailable
                 'customerName' => $this->customerName,
                 'jobs'=> $this->jobs,
                 'estimates'=>$this->estimates,
-                'agent'=> $this->agent
+                'agent'=> $this->agent,
+                'mondayURL'=>$this->mondayURL,
+                'fnames'=>$this->fnames
             ],
         );
     }

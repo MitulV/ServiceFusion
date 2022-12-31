@@ -37,27 +37,42 @@ class HomeController extends Controller
     public function getCustomers(Request $request){
        
         $accessToken=$this->refreshAccessToken($request);
-        $url="https://api.servicefusion.com/v1/customers?per-page=50&filters[tags]=member&sort=-created_at"; 
+        $url="https://api.servicefusion.com/v1/customers?per-page=10&filters[tags]=member&sort=-created_at&expand=contacts,contacts.emails,custom_fields"; 
         $response=CommonUtil::callAPI($url,[],'GET',$accessToken); 
-  
         foreach ($response['items'] as $customer) {
             $customerName=$customer['customer_name'];
+            $mondayURL="#";
+
+            foreach ($customer['custom_fields'] as $field) {
+                if($field['name']=="Monday.com On Demand Projects"){
+                    if($field['value']!=null){
+                        $mondayURL=$field['value'];
+                    }
+                }
+            }
+
             $agent=$customer['agent'];
             $email='darshil@admin.com';
-            $this->getJobs($customerName,$email,$agent,$accessToken);  
-            // if($customerName=="Michael and Hillary Riccobene"){
-            //     $this->getJobs($customerName,$email,$agent,$accessToken);  
+
+            $fnames=count($customer['contacts'])==1 ? 
+                    $customer['contacts'][0]['fname'] : 
+                    $customer['contacts'][0]['fname']." and ".$customer['contacts'][1]['fname'];
+                
+
+            $this->getJobs($customerName,$email,$agent,$accessToken,$mondayURL,$fnames);  
+            // if($customerName=="Amir and Anne Mehr"){
+            //     $this->getJobs($customerName,$email,$agent,$accessToken,$mondayURL,$fnames);  
             // }
             
         }  
         return ['status'=>'ok'];
     }
 
-    public function getJobs($customerName,$email,$agent,$accessToken){
+    public function getJobs($customerName,$email,$agent,$accessToken,$mondayURL,$fnames){
         $lte=Carbon::now()->addDays(30)->toDateString(); 
         $gte=Carbon::now()->toDateString();
         
-        $url="https://api.servicefusion.com/v1/jobs?filters[customer_name]=$customerName&filters[start_date][lte]=$lte&filters[start_date][gte]=$gte&access_token=$accessToken&filters[status]=Scheduled";
+        $url="https://api.servicefusion.com/v1/jobs?filters[customer_name]=$customerName&filters[start_date][lte]=$lte&filters[start_date][gte]=$gte&access_token=$accessToken&filters[status]=Scheduled&sort=start_date";
         
         $response = json_decode(Http::get($url), true);    
         $jobs=$response && $response['items'] ? $response['items'] : [];
@@ -67,10 +82,10 @@ class HomeController extends Controller
             array_push($jobs_new,$job);
         }   
        }
-        $this->getEstimates($customerName,$email,$jobs_new,$agent,$accessToken);
+        $this->getEstimates($customerName,$email,$jobs_new,$agent,$accessToken,$mondayURL,$fnames);
     }
 
-    public function getEstimates($customerName,$email,$jobs,$agent,$accessToken){
+    public function getEstimates($customerName,$email,$jobs,$agent,$accessToken,$mondayURL,$fnames){
         $url="https://api.servicefusion.com/v1/estimates?filters[customer_name]=$customerName&filters[status]=Estimate Provided&access_token=$accessToken";
         $response = json_decode(Http::get($url), true); 
         $estimates=$response && $response['items'] ? $response['items'] : [];
@@ -81,10 +96,10 @@ class HomeController extends Controller
                 array_push($estimates_new,$estimate);
             }   
         }
-        $this->sendEmail($customerName,$email,$jobs,$agent,$estimates_new);
+        $this->sendEmail($customerName,$email,$jobs,$agent,$estimates_new,$mondayURL,$fnames);
     }
 
-    public function sendEmail($customerName,$email,$jobs,$agent,$estimates){
-        Mail::to($email)->send(new sendFusionData($customerName,$jobs,$estimates,$agent));
+    public function sendEmail($customerName,$email,$jobs,$agent,$estimates,$mondayURL,$fnames){
+        Mail::to($email)->send(new sendFusionData($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames));
     }
 }

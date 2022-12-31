@@ -5,7 +5,7 @@
 </head>
 <body>
     <p>
-        <h2>Hello {{$customerName}},</h2>
+        <h2>Hello {{$fnames}},</h2>
     </p>
 
     <p>Please find below your Exhale weekly service update.</p>
@@ -20,7 +20,7 @@
         The link below provides information on the status of your outstanding on demand projects. Please let us know if you have any questions, input, or additional projects you’d like for us to add. You can also bookmark this link and be able to reference it anytime – we will keep it updated throughout the week.
     </p>   
     
-    <h3>On Demand Projects</h3>
+    <h3><a href="{{$mondayURL}}" target="_blank">On Demand Projects</a></h3>
         
       <h3>SCHEDULED SERVICES</h3>
         
@@ -39,9 +39,10 @@
         @foreach ($jobs as $job)
         {{$loop->iteration}}) {{$job['description']}}<br>
         Date : {{Carbon\Carbon::parse($job['start_date'])->format('m-d-Y') }}<br>
-        Tech Assigned : - <br>
-        Arrival Time Window : {{$job['time_frame_promised_start']}} to {{$job['time_frame_promised_end']}}<br>
-        Duration : {{Carbon\CarbonInterval::seconds($job['duration'])->cascade()->forHumans()}}<br><br>
+        {{-- Tech Assigned : - <br> --}}
+        Arrival Time Window : {{Carbon\Carbon::parse($job['time_frame_promised_start'])->format('g:i A')}} to {{Carbon\Carbon::parse($job['time_frame_promised_end'])->format('g:i A')}}<br>
+        {{-- Duration : {{Carbon\CarbonInterval::seconds($job['duration'])->cascade()->forHumans()}} --}}
+        <br><br>
         @endforeach
             
         @endif    
@@ -53,7 +54,7 @@
         <p>Please find below a summary of your open estimates at this time.</p>
 
         @if (empty($estimates))
-            <h3>we currently do not have any estimates.</h3>
+            <h3>There are no open estimates at this time.</h3>
         @else
             
             @foreach ($estimates as $estimate)

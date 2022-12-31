@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Http;
 
 Route::get('/', function () {
     
-    //return Carbon\CarbonInterval::seconds(7261)->cascade()->forHumans();
+    
     //return view('welcome');
 });
 
