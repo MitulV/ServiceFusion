@@ -59,7 +59,7 @@
             
             @foreach ($estimates as $estimate)
                 {{$loop->iteration}}) Description: {{$estimate['description']}}<br>
-                Value: ${{number_format($estimate['total'], 2, '.', ',')}}<br>
+                Value: ${{number_format($estimate['total'],2)}}<br>
                 Status: {{$estimate['status']}}<br><br>
             @endforeach
 
