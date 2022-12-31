@@ -38,9 +38,9 @@
 
         @foreach ($jobs as $job)
         {{$loop->iteration}}) {{$job['description']}}<br>
-        Date : {{Carbon\Carbon::parse($job['start_date'])->format('m-d-Y') }}<br>
+        Date: {{Carbon\Carbon::parse($job['start_date'])->format('m-d-Y') }}<br>
         {{-- Tech Assigned : - <br> --}}
-        Arrival Time Window : {{Carbon\Carbon::parse($job['time_frame_promised_start'])->format('g:i A')}} to {{Carbon\Carbon::parse($job['time_frame_promised_end'])->format('g:i A')}}<br>
+        Arrival Time Window: {{Carbon\Carbon::parse($job['time_frame_promised_start'])->format('g:i A')}} to {{Carbon\Carbon::parse($job['time_frame_promised_end'])->format('g:i A')}}<br>
         {{-- Duration : {{Carbon\CarbonInterval::seconds($job['duration'])->cascade()->forHumans()}} --}}
         <br><br>
         @endforeach
@@ -58,9 +58,9 @@
         @else
             
             @foreach ($estimates as $estimate)
-                {{$loop->iteration}}) Description : {{$estimate['description']}}<br>
-                Value : {{$estimate['total']}}<br>
-                Status : {{$estimate['status']}}<br><br>
+                {{$loop->iteration}}) Description: {{$estimate['description']}}<br>
+                Value: ${{number_format($estimate['total'], 2, '.', ',')}}<br>
+                Status: {{$estimate['status']}}<br><br>
             @endforeach
 
         @endif  

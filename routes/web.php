@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Http;
 
 Route::get('/', function () {
     
-    
+    //return number_format("10384.8", 2, '.', ',');
     //return view('welcome');
 });
 
