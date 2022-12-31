@@ -59,10 +59,10 @@ class HomeController extends Controller
                     $customer['contacts'][0]['fname']." and ".$customer['contacts'][1]['fname'];
                 
 
-            //$this->getJobs($customerName,$email,$agent,$accessToken,$mondayURL,$fnames);  
-            if($customerName=="Jordan and Amanda"){
-                $this->getJobs($customerName,$email,$agent,$accessToken,$mondayURL,$fnames);  
-            }
+            $this->getJobs($customerName,$email,$agent,$accessToken,$mondayURL,$fnames);  
+            // if($customerName=="Jordan and Amanda"){
+            //     $this->getJobs($customerName,$email,$agent,$accessToken,$mondayURL,$fnames);  
+            // }
             
         }  
         return ['status'=>'ok'];
