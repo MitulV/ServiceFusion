@@ -37,7 +37,7 @@ class HomeController extends Controller
     public function getCustomers(Request $request){
        
         $accessToken=$this->refreshAccessToken($request);
-        $url="https://api.servicefusion.com/v1/customers?per-page=10&filters[tags]=member&sort=-created_at&expand=contacts,contacts.emails,custom_fields"; 
+        $url="https://api.servicefusion.com/v1/customers?per-page=50&filters[tags]=member&sort=-created_at&expand=contacts,contacts.emails,custom_fields"; 
         $response=CommonUtil::callAPI($url,[],'GET',$accessToken); 
         foreach ($response['items'] as $customer) {
             $customerName=$customer['customer_name'];
@@ -54,13 +54,18 @@ class HomeController extends Controller
             $agent=$customer['agent'];
             $email='darshil@admin.com';
 
-            $fnames=count($customer['contacts'])==1 ? 
-                    $customer['contacts'][0]['fname'] : 
-                    $customer['contacts'][0]['fname']." and ".$customer['contacts'][1]['fname'];
-                
+            $fnames='';
 
-            $this->getJobs($customerName,$email,$agent,$accessToken,$mondayURL,$fnames);  
-            // if($customerName=="Jordan and Amanda"){
+            if(count($customer['contacts'])==1){
+                $fnames=$customer['contacts'][0]['fname'];
+            }elseif(count($customer['contacts'])==2){
+                $fnames=$customer['contacts'][0]['fname']." and ".$customer['contacts'][1]['fname'];
+            }elseif (count($customer['contacts'])==3) {
+                $fnames=$customer['contacts'][0]['fname'].",".$customer['contacts'][1]['fname']." and ".$customer['contacts'][2]['fname'];
+            }
+                    
+           $this->getJobs($customerName,$email,$agent,$accessToken,$mondayURL,$fnames);  
+            // if($customerName=="Kevin and Nancy Schimelfenig"){
             //     $this->getJobs($customerName,$email,$agent,$accessToken,$mondayURL,$fnames);  
             // }
             
@@ -86,13 +91,20 @@ class HomeController extends Controller
     }
 
     public function getEstimates($customerName,$email,$jobs,$agent,$accessToken,$mondayURL,$fnames){
-        $url="https://api.servicefusion.com/v1/estimates?filters[customer_name]=$customerName&filters[status]=Estimate Provided&access_token=$accessToken";
+        $url="https://api.servicefusion.com/v1/estimates?filters[customer_name]=$customerName&filters[status]=Estimate Provided&access_token=$accessToken&expand=printable_work_order";
         $response = json_decode(Http::get($url), true); 
         $estimates=$response && $response['items'] ? $response['items'] : [];
         $estimates_new=[];
         foreach($estimates as $estimate) 
         { 
             if(Carbon::parse($estimate['created_at'])->gt('2022-10-01T00:00:00+00:00')){
+                $printWithRates='-';
+                foreach ($estimate['printable_work_order'] as $printRate) {
+                    if($printRate['name']=='Print With Rates'){
+                        $printWithRates=$printRate['url'];
+                    }
+                }
+                $estimate['printWithRates']=$printWithRates;
                 array_push($estimates_new,$estimate);
             }   
         }
