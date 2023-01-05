@@ -17,9 +17,10 @@ use Illuminate\Support\Facades\Http;
 */
 
 Route::get('/', function () {
-    
-    //return number_format("10384.8", 2, '.', ',');
     return view('welcome');
 });
+
+Route::get('file-upload', [App\Http\Controllers\FileUploadController::class,'fileUpload'])->name('file.upload');
+Route::post('file-upload', [App\Http\Controllers\FileUploadController::class,'fileUploadPost'])->name('file.upload.post');
 
 Route::get('/customers',[HomeController::class,'getCustomers']);

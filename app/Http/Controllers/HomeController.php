@@ -43,6 +43,7 @@ class HomeController extends Controller
             $customerName=$customer['customer_name'];
             $mondayURL="#";
 
+
             foreach ($customer['custom_fields'] as $field) {
                 if($field['name']=="Monday.com On Demand Projects"){
                     if($field['value']!=null){
@@ -52,7 +53,7 @@ class HomeController extends Controller
             }
 
             $agent=$customer['agent'];
-            $email='darshil@admin.com';
+            $email=$customer['contacts'][0]['emails'][0]['email'];
 
             $fnames='';
 
@@ -64,10 +65,10 @@ class HomeController extends Controller
                 $fnames=$customer['contacts'][0]['fname'].",".$customer['contacts'][1]['fname']." and ".$customer['contacts'][2]['fname'];
             }
                     
-           $this->getJobs($customerName,$email,$agent,$accessToken,$mondayURL,$fnames);  
-            // if($customerName=="Kevin and Nancy Schimelfenig"){
-            //     $this->getJobs($customerName,$email,$agent,$accessToken,$mondayURL,$fnames);  
-            // }
+           //$this->getJobs($customerName,$email,$agent,$accessToken,$mondayURL,$fnames);  
+            if($customerName=="Tiffany and Bill"){
+                $this->getJobs($customerName,$email,$agent,$accessToken,$mondayURL,$fnames);  
+            }
             
         }  
         return ['status'=>'ok'];
