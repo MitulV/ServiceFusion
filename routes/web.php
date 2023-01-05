@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
 
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Http;
 */
 
 Route::get('/', function () {
+    return (Carbon::now()->subDays(365))->lt('2022-10-01T00:00:00+00:00');
     return view('welcome');
 });
 

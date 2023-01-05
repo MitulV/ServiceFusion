@@ -98,7 +98,7 @@ class HomeController extends Controller
         $estimates_new=[];
         foreach($estimates as $estimate) 
         { 
-            if(Carbon::parse($estimate['created_at'])->gt('2022-10-01T00:00:00+00:00')){
+            if(Carbon::parse($estimate['created_at'])->gt(Carbon::now()->subDays(365))){
                 $printWithRates='-';
                 foreach ($estimate['printable_work_order'] as $printRate) {
                     if($printRate['name']=='Print With Rates'){
