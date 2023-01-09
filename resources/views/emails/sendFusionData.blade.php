@@ -60,7 +60,7 @@
             @foreach ($estimates as $estimate)
                 {{$loop->iteration}}) Description: {{$estimate['description']}}<br>
                 Value: ${{number_format($estimate['total'],2)}}<br>
-                View Estimate: <a href="{{$estimate['printWithRates']}}" target="_blank">{{$estimate['printWithRates']}}</a>
+                View Estimate: <a href="{{$estimate['printWithRates']}}" target="_blank">{{$estimate['printWithRates']}}</a><br>
                 Status: {{$estimate['status']}}<br><br>
             @endforeach
 

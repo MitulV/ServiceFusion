@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Http;
 
-
 class HomeController extends Controller
 {
     public function refreshAccessToken(Request $request){
@@ -39,11 +38,11 @@ class HomeController extends Controller
         $accessToken=$this->refreshAccessToken($request);
         $url="https://api.servicefusion.com/v1/customers?per-page=50&filters[tags]=member&sort=-created_at&expand=contacts,contacts.emails,custom_fields"; 
         $response=CommonUtil::callAPI($url,[],'GET',$accessToken); 
-        foreach ($response['items'] as $customer) {
+        foreach ($response['items'] as $customer) 
+        {
             $customerName=$customer['customer_name'];
             $mondayURL="#";
-
-
+            
             foreach ($customer['custom_fields'] as $field) {
                 if($field['name']=="Monday.com On Demand Projects"){
                     if($field['value']!=null){
@@ -53,7 +52,6 @@ class HomeController extends Controller
             }
 
             $agent=$customer['agent'];
-            $email=$customer['contacts'][0]['emails'][0]['email'];
 
             $fnames='';
 
@@ -64,11 +62,18 @@ class HomeController extends Controller
             }elseif (count($customer['contacts'])==3) {
                 $fnames=$customer['contacts'][0]['fname'].",".$customer['contacts'][1]['fname']." and ".$customer['contacts'][2]['fname'];
             }
-                    
-           $this->getJobs($customerName,$email,$agent,$accessToken,$mondayURL,$fnames);  
-            // if($customerName=="Tiffany and Bill"){
-            //     $this->getJobs($customerName,$email,$agent,$accessToken,$mondayURL,$fnames);  
-            // }
+
+            $email=[];
+
+            foreach ($customer['contacts'] as $contact) {
+                foreach ($contact['emails'] as $contact_email) {
+                    if(!is_null($contact_email['email'])){
+                        array_push($email,$contact_email['email']);
+                    }
+                }
+            } 
+            
+            $this->getJobs($customerName,$email,$agent,$accessToken,$mondayURL,$fnames);  
             
         }  
         return ['status'=>'ok'];
@@ -113,6 +118,6 @@ class HomeController extends Controller
     }
 
     public function sendEmail($customerName,$email,$jobs,$agent,$estimates,$mondayURL,$fnames){
-        Mail::to($email)->send(new sendFusionData($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames));
+        Mail::to($email)->cc(['kinjal@exhaleathome.com'])->send(new sendFusionData($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames));    
     }
 }

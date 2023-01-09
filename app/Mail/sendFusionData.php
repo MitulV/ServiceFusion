@@ -12,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
 class sendFusionData extends Mailable
 {
     use Queueable, SerializesModels;
-    protected $customerName,$jobs,$estimates,$agent;
+    protected $customerName,$jobs,$estimates,$agent,$mondayURL,$fnames;
     /**
      * Create a new message instance.
      *
@@ -24,8 +24,8 @@ class sendFusionData extends Mailable
         $this->jobs = $jobs;
         $this->estimates = $estimates;
         $this->agent = $agent;
-        $this->mondayURL=$mondayURL;
-        $this->fnames=$fnames;
+        $this->mondayURL = $mondayURL;
+        $this->fnames = $fnames;
     }
 
     /**
@@ -36,7 +36,7 @@ class sendFusionData extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Send Fusion Data',
+            subject: 'Exhale',
         );
     }
 
@@ -48,7 +48,7 @@ class sendFusionData extends Mailable
     public function content()
     {
         return new Content(
-            view: 'emails.sendFusionData',
+            view: 'emails.sendFusionDatacopy',
             with: [
                 'customerName' => $this->customerName,
                 'jobs'=> $this->jobs,

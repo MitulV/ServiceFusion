@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Rap2hpoutre\FastExcel\FastExcel;
 
+
+
 class FileUploadController extends Controller
 {
     public function fileUploadPost(Request $request)
@@ -13,7 +15,10 @@ class FileUploadController extends Controller
         $request->validate([
             'file' => 'required|mimes:xlsx',
         ]);
-               
+
+        
+
+
         $file=$request->file;
         $data = (new FastExcel)->import($file);
         dd($data);

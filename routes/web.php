@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Http;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome');    
 });
 
 Route::get('file-upload', [App\Http\Controllers\FileUploadController::class,'fileUpload'])->name('file.upload');
