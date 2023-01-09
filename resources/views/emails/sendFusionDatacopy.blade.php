@@ -63,7 +63,7 @@
             
         @endif    
         
-        <br><br><br>
+        <br><br>
         
         <h3 style="font-family: sans-serif;font-style: oblique">OPEN ESTIMATES</h3>
         
@@ -89,7 +89,7 @@
         
         <p style="font-family: sans-serif;">As always, we appreciate and value your business.  Have a wonderful weekend.</p>
         
-        <b>Best Regards,</b><br>
+        <b style="font-family: sans-serif;font-style: oblique">Best Regards,</b><br>
         {{$agent}}<br>
         Exhale
 </body>

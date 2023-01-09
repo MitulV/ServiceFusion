@@ -36,7 +36,7 @@ class HomeController extends Controller
     public function getCustomers(Request $request){
        
         $accessToken=$this->refreshAccessToken($request);
-        $url="https://api.servicefusion.com/v1/customers?per-page=50&filters[tags]=member&sort=-created_at&expand=contacts,contacts.emails,custom_fields"; 
+        $url="https://api.servicefusion.com/v1/customers?per-page=1&filters[tags]=member&sort=-created_at&expand=contacts,contacts.emails,custom_fields"; 
         $response=CommonUtil::callAPI($url,[],'GET',$accessToken); 
         foreach ($response['items'] as $customer) 
         {
