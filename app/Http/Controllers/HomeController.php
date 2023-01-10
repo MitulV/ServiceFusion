@@ -40,13 +40,24 @@ class HomeController extends Controller
         $response=CommonUtil::callAPI($url,[],'GET',$accessToken); 
         foreach ($response['items'] as $customer) 
         {
+            $sendFlag=false;
             $customerName=$customer['customer_name'];
             $mondayURL="#";
             
-            foreach ($customer['custom_fields'] as $field) {
-                if($field['name']=="Monday.com On Demand Projects"){
-                    if($field['value']!=null){
+            foreach ($customer['custom_fields'] as $field)
+            {
+                if($field['name']=="Monday.com On Demand Projects")
+                {
+                    if($field['value']!=null)
+                    {
                         $mondayURL=$field['value'];
+                    }
+                }
+                if($field['name']=="1-Membership Start (Target/Actual)")
+                {
+                    if((Carbon::parse($field['value']))->lt(Carbon::now()))
+                    {
+                        $sendFlag=true;
                     }
                 }
             }
@@ -60,7 +71,7 @@ class HomeController extends Controller
             }elseif(count($customer['contacts'])==2){
                 $fnames=$customer['contacts'][0]['fname']." and ".$customer['contacts'][1]['fname'];
             }elseif (count($customer['contacts'])==3) {
-                $fnames=$customer['contacts'][0]['fname'].",".$customer['contacts'][1]['fname']." and ".$customer['contacts'][2]['fname'];
+                $fnames=$customer['contacts'][0]['fname'].", ".$customer['contacts'][1]['fname']." and ".$customer['contacts'][2]['fname'];
             }
 
             $email=[];
@@ -73,8 +84,10 @@ class HomeController extends Controller
                 }
             } 
             
-            $this->getJobs($customerName,$email,$agent,$accessToken,$mondayURL,$fnames);  
-            
+            if($sendFlag){
+                $this->getJobs($customerName,$email,$agent,$accessToken,$mondayURL,$fnames); 
+            }
+             
         }  
         return ['status'=>'ok'];
     }

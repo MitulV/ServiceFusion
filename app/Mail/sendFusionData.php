@@ -36,7 +36,7 @@ class sendFusionData extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Exhale',
+            subject: 'Weekly Exhale Update: Upcoming Scheduled Services and Open Estimates',
         );
     }
 
@@ -48,7 +48,7 @@ class sendFusionData extends Mailable
     public function content()
     {
         return new Content(
-            view: 'emails.sendFusionDatacopy',
+            view: 'emails.sendFusionData',
             with: [
                 'customerName' => $this->customerName,
                 'jobs'=> $this->jobs,
