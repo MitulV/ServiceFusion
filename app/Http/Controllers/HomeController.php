@@ -131,6 +131,12 @@ class HomeController extends Controller
     }
 
     public function sendEmail($customerName,$email,$jobs,$agent,$estimates,$mondayURL,$fnames){
-        Mail::to($email)->cc(['kinjal@exhaleathome.com'])->send(new sendFusionData($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames));    
+        $agentEmail='';
+        if(strcasecmp($agent,"Brian Furnas")==0){
+            $agentEmail="brian@exhaleathome.com";
+        }else{
+            $agentEmail="phoebe@exhaleathome.com";
+        }
+        Mail::to($email)->cc(['kinjal@exhaleathome.com',$agentEmail])->send(new sendFusionData($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames));    
     }
 }
