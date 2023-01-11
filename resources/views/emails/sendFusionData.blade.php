@@ -65,7 +65,7 @@
         @endif
         <span class="cmnfont">{{$job['description']}}</span><br>
         {{-- Duration : {{Carbon\CarbonInterval::seconds($job['duration'])->cascade()->forHumans()}} --}}
-        </div>
+        </div><br>
         @endforeach
             
         @endif    
@@ -99,7 +99,7 @@
             <b>Home Manager</b><br>
             <b>Phone: 919.332.3564</b><br>
             <b><a href="mailto:brian@exhaleathome.com">brian@exhaleathome.com</a></b><br>
-            <b><a href="https://exhaleathome.com/"></a>https://exhaleathome.com/</b><br>
+            <b><a href="https://exhaleathome.com/">https://exhaleathome.com/</a></b><br>
         @else
             <b class="cmnfontwithStyle">{{$agent}}</b><br>
             <b>Home Manager</b><br>
