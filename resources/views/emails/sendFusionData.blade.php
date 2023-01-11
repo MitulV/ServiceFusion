@@ -84,7 +84,6 @@
                 <div>
                 <b class="cmnfont">{{$estimate['description']}}</b><br>
                 Value: ${{number_format($estimate['total'],2)}}<br>
-                <a href="{{$estimate['printWithRates']}}" target="_blank">View Estimate</a><br>
                 Status: {{$estimate['status']}}<br><br>
                 </div><br>
             @endforeach
