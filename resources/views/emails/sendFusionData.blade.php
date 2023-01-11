@@ -86,14 +86,14 @@
                 Value: ${{number_format($estimate['total'],2)}}<br>
                 <a href="{{$estimate['printWithRates']}}" target="_blank">View Estimate</a><br>
                 Status: {{$estimate['status']}}<br><br>
-                </div>
+                </div><br>
             @endforeach
 
         @endif  
         
         <p class="cmnfont">As always, we appreciate and value your business.  Have a wonderful weekend.</p>
         
-        <span class="cmnfontwithStyle">Best Regards,</span><br>
+        <span class="cmnfontwithStyle">Best Regards,</span><br><br>
         @if (strcasecmp($agent,"Brian Furnas")==0)
             <b class="cmnfontwithStyle">{{$agent}}</b><br>
             <b>Home Manager</b><br>
