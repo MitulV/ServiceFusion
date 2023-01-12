@@ -98,13 +98,13 @@
             <b>Home Manager</b><br>
             <b>Mobile: 919.332.3564</b><br>
             <b><a href="mailto:brian@exhaleathome.com">brian@exhaleathome.com</a></b><br>
-            <b><a href="https://exhaleathome.com/">exhaleathome.com/</a></b><br>
+            <b><a href="https://exhaleathome.com/">exhaleathome.com</a></b><br>
         @else
             <b class="cmnfontwithStyle">{{$agent}}</b><br>
             <b>Home Manager</b><br>
             <b>Mobile: 336.705.4865</b><br>
             <b><a href="mailto:phoebe@exhaleathome.com">phoebe@exhaleathome.com</a></b><br>
-            <b><a href="https://exhaleathome.com">exhaleathome.com/</a></b><br>
+            <b><a href="https://exhaleathome.com">exhaleathome.com</a></b><br>
         @endif
 </body>
 </html>
