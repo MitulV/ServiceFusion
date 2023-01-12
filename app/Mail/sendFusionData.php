@@ -8,17 +8,18 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Address;
 
 class sendFusionData extends Mailable
 {
     use Queueable, SerializesModels;
-    protected $customerName,$jobs,$estimates,$agent,$mondayURL,$fnames;
+    protected $customerName,$jobs,$estimates,$agent,$mondayURL,$fnames,$agentEmail;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames)
+    public function __construct($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames,$agentEmail)
     {
         $this->customerName = $customerName;
         $this->jobs = $jobs;
@@ -26,6 +27,7 @@ class sendFusionData extends Mailable
         $this->agent = $agent;
         $this->mondayURL = $mondayURL;
         $this->fnames = $fnames;
+        $this->agentEmail=$agentEmail;
     }
 
     /**
@@ -37,6 +39,7 @@ class sendFusionData extends Mailable
     {
         return new Envelope(
             subject: 'Weekly Exhale Update: Upcoming Scheduled Services and Open Estimates',
+            from: new Address($this->agentEmail, $this->agent),
         );
     }
 

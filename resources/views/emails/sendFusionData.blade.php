@@ -34,7 +34,7 @@
         The link below provides information on the status of your outstanding on demand projects. Please let us know if you have any questions, input, or additional projects you’d like for us to add. You can also bookmark this link and be able to reference it anytime – we will keep it updated throughout the week.
     </p>   
     
-    <h3 class="cmnfont" style="margin-top: 0px;"><a href="{{$mondayURL}}" target="_blank">On Demand Projects</a></h3>
+    <p class="cmnfont" style="margin-top: 0px;"><a href="{{$mondayURL}}" target="_blank">On Demand Projects</a></p>
     
     <br><br>
     <div style="border-bottom: 1px solid black;padding: 0px;">
@@ -96,15 +96,15 @@
         @if (strcasecmp($agent,"Brian Furnas")==0)
             <b class="cmnfontwithStyle">{{$agent}}</b><br>
             <b>Home Manager</b><br>
-            <b>Phone: 919.332.3564</b><br>
+            <b>Mobile: 919.332.3564</b><br>
             <b><a href="mailto:brian@exhaleathome.com">brian@exhaleathome.com</a></b><br>
-            <b><a href="https://exhaleathome.com/">https://exhaleathome.com/</a></b><br>
+            <b><a href="https://exhaleathome.com/">exhaleathome.com/</a></b><br>
         @else
             <b class="cmnfontwithStyle">{{$agent}}</b><br>
             <b>Home Manager</b><br>
             <b>Mobile: 336.705.4865</b><br>
             <b><a href="mailto:phoebe@exhaleathome.com">phoebe@exhaleathome.com</a></b><br>
-            <b><a href="https://exhaleathome.com">https://exhaleathome.com/</a></b><br>
+            <b><a href="https://exhaleathome.com">exhaleathome.com/</a></b><br>
         @endif
 </body>
 </html>
