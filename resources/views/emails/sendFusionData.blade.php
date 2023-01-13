@@ -94,17 +94,17 @@
         
         <span class="cmnfontwithStyle">Best Regards,</span><br><br>
         @if (strcasecmp($agent,"Brian Furnas")==0)
-            <b class="cmnfontwithStyle">{{$agent}}</b><br>
-            <b>Home Manager</b><br>
-            <b>Mobile: 919.332.3564</b><br>
-            <b><a href="mailto:brian@exhaleathome.com">brian@exhaleathome.com</a></b><br>
-            <b><a href="https://exhaleathome.com/">exhaleathome.com</a></b><br>
+            <b class="cmnfont">{{strtolower($agent)}}</b><br>
+            <b class="cmnfont">Home Manager</b><br>
+            <span class="cmnfont">Mobile: 919.332.3564</span><br>
+            <b class="cmnfont"><a href="mailto:brian@exhaleathome.com">brian@exhaleathome.com</a></b><br>
+            <b class="cmnfont"><a href="https://exhaleathome.com/">exhaleathome.com</a></b><br>
         @else
-            <b class="cmnfontwithStyle">{{$agent}}</b><br>
-            <b>Home Manager</b><br>
-            <b>Mobile: 336.705.4865</b><br>
-            <b><a href="mailto:phoebe@exhaleathome.com">phoebe@exhaleathome.com</a></b><br>
-            <b><a href="https://exhaleathome.com">exhaleathome.com</a></b><br>
+            <b class="cmnfont">{{strtolower($agent)}}</b><br>
+            <b class="cmnfont">Home Manager</b><br>
+            <span class="cmnfont">Mobile: 336.705.4865</span><br>
+            <b class="cmnfont"><a href="mailto:phoebe@exhaleathome.com">phoebe@exhaleathome.com</a></b><br>
+            <b class="cmnfont"><a href="https://exhaleathome.com">exhaleathome.com</a></b><br>
         @endif
 </body>
 </html>

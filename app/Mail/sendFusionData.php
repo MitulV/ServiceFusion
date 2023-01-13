@@ -30,6 +30,7 @@ class sendFusionData extends Mailable
         $this->agentEmail=$agentEmail;
     }
 
+
     /**
      * Get the message envelope.
      *

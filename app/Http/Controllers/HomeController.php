@@ -36,7 +36,7 @@ class HomeController extends Controller
     public function getCustomers(Request $request){
        
         $accessToken=$this->refreshAccessToken($request);
-        $url="https://api.servicefusion.com/v1/customers?per-page=10&filters[tags]=member&sort=-created_at&expand=contacts,contacts.emails,custom_fields"; 
+        $url="https://api.servicefusion.com/v1/customers?per-page=1&filters[tags]=member&sort=-created_at&expand=contacts,contacts.emails,custom_fields"; 
         $response=CommonUtil::callAPI($url,[],'GET',$accessToken); 
         foreach ($response['items'] as $customer) 
         {
@@ -146,6 +146,11 @@ class HomeController extends Controller
         //Mail::to($email)->bcc(['kinjal@exhaleathome.com',$agentEmail])->send(new sendFusionData($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames,$agentEmail));    
     
         //For Live Temp
-        Mail::to($email)->bcc(['kinjal@exhaleathome.com',$agentEmail])->send(new sendFusionData($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames,'kinjal@exhaleathome.com'));    
+        if(strcasecmp($agent,"Brian Furnas")==0){
+            Mail::mailer('smtp')->to($email)->bcc(['kinjal@exhaleathome.com',$agentEmail])->send(new sendFusionData($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames,$agentEmail));    
+        }else{
+            Mail::mailer('smtp2')->to($email)->bcc(['kinjal@exhaleathome.com',$agentEmail])->send(new sendFusionData($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames,$agentEmail));    
+        }
+
     }
 }
