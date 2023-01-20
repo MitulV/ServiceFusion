@@ -89,7 +89,7 @@ class HomeController extends Controller
             } 
             
             if($sendFlag){
-                $this->getJobs($customerName,$email,$agent,$accessToken,$mondayURL,$fnames); 
+                    $this->getJobs($customerName,$email,$agent,$accessToken,$mondayURL,$fnames); 
             }
              
         }  
@@ -149,7 +149,7 @@ class HomeController extends Controller
         if(strcasecmp($agent,"Brian Furnas")==0){
             Mail::mailer('smtp')->to($email)->bcc(['kinjal@exhaleathome.com',$agentEmail])->send(new sendFusionData($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames,$agentEmail));    
         }else{
-            Mail::mailer('smtp2')->to($email)->bcc(['kinjal@exhaleathome.com',$agentEmail])->send(new sendFusionData($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames,$agentEmail));    
+            Mail::mailer('smtp')->to($email)->bcc(['kinjal@exhaleathome.com',$agentEmail])->send(new sendFusionData($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames,$agentEmail));    
         }
 
     }
