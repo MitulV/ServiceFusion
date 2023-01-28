@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Exhale - Service Fusion</title>
+    <title>Exhale</title>
     <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -14,6 +16,11 @@
 
 <body>
 <div class="container">
+  @if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
 
 <nav class="navbar navbar-default" style="margin-top: 2%">
   <div class="container-fluid">
@@ -25,15 +32,15 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="http://localhost/webscraper/public">Exhale - Service Fusion</a>
+      <a class="navbar-brand" href="http://localhost/webscraper/public">Exhale</a>
     </div>
 
-    {{-- <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="http://localhost/webscraper/public">Section A <span class="sr-only">(current)</span></a></li>
-        <li><a href="http://localhost/webscraper/public/section-B">Section B</a></li>
+        {{-- <li class="active"><a href="http://localhost/webscraper/public">Section A <span class="sr-only">(current)</span></a></li>
+        <li><a href="http://localhost/webscraper/public/section-B">Section B</a></li> --}}
       </ul>
-    </div> --}}
+    </div>
   
   </div>
 
@@ -77,9 +84,16 @@
                     <button type="submit" class="btn btn-success">Submit</button>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <button type="button" class="btn btn-secondary" onclick='window.location.reload(true)'>Reset</button>
                 </div>
+
+                <div class="col-md-3">
+                  <a href="{{ route('getCustomers')}}">
+                  <button type="button" class="btn btn-primary">Send Customer Emails<span style="margin-left: 5%"><i class="fa-solid fa-paper-plane">  
+                  </i></span></button>
+                  </a>
+              </div>
     
             </div>
         </form>

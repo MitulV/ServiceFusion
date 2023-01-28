@@ -19,9 +19,9 @@ use Illuminate\Support\Facades\Http;
 
 Route::get('/', function () {
     return view('welcome');    
-});
+})->name('home');
 
 Route::get('file-upload', [App\Http\Controllers\FileUploadController::class,'fileUpload'])->name('file.upload');
 Route::post('file-upload', [App\Http\Controllers\FileUploadController::class,'fileUploadPost'])->name('file.upload.post');
 
-Route::get('/customers',[HomeController::class,'getCustomers']);
+Route::get('/customers',[HomeController::class,'getCustomers'])->name('getCustomers');
