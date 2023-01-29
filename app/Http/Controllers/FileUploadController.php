@@ -122,34 +122,49 @@ class FileUploadController extends Controller
 
         foreach ($array as $item) 
         {
-        $startDate = $item['start_date'];
-        $description = $item['description'];
-        $customerName = $item['customer_name'];
-        $category = $item['category'];
-        $status = $item['status'];
-        $duration = $item['duration'];
-        $priority = $item['priority'];
+            $startDate = $item['start_date'];
+            $description = $item['description'];
+            $customerName = $item['customer_name'];
+            $category = $item['category'];
+            $status = $item['status'];
+            $duration = $item['duration'];
+            $priority = $item['priority'];
 
-        if (isset($mergedArray[$startDate])) {
-            $mergedArray[$startDate]['description'] .= '; Maintenance ' . $description;
-            $mergedArray[$startDate]['duration'] += $duration;
-            $mergedArray[$startDate]['tasks'][] = [
-                'description' => $description,
-                'is_completed' => false,
-              ];
-        } else {
-            $mergedArray[$startDate]['start_date'] = $startDate;
-            $mergedArray[$startDate]['customer_name'] = $customerName;
-            $mergedArray[$startDate]['category'] = $category;
-            $mergedArray[$startDate]['status'] = $status;
-            $mergedArray[$startDate]['priority'] = $priority;
-            $mergedArray[$startDate]['description'] = 'Maintenance '.$description;
-            $mergedArray[$startDate]['duration'] = $duration;
-            $mergedArray[$startDate]['tasks'][] = [
-                'description' => $description,
-                'is_completed' => false,
-              ];
-        }
+            if((isset($mergedArray['category']) && ($mergedArray[$startDate]['category']=='landscaping' || $mergedArray[$startDate]['category']=='pest control' || $mergedArray[$startDate]['category']=='pool maintenance'))){
+                $mergedArray[$startDate]['start_date'] = $startDate;
+                    $mergedArray[$startDate]['customer_name'] = $customerName;
+                    $mergedArray[$startDate]['category'] = $category;
+                    $mergedArray[$startDate]['status'] = $status;
+                    $mergedArray[$startDate]['priority'] = $priority;
+                    $mergedArray[$startDate]['description'] = 'Maintenance '.$description;
+                    $mergedArray[$startDate]['duration'] = $duration;
+                    $mergedArray[$startDate]['tasks'][] = [
+                        'description' => $description,
+                        'is_completed' => false,
+                    ];
+            }else{
+                if (isset($mergedArray[$startDate])) {
+                    $mergedArray[$startDate]['description'] .= '; Maintenance ' . $description;
+                    $mergedArray[$startDate]['duration'] += $duration;
+                    $mergedArray[$startDate]['tasks'][] = [
+                        'description' => $description,
+                        'is_completed' => false,
+                    ];
+                } else {
+                    $mergedArray[$startDate]['start_date'] = $startDate;
+                    $mergedArray[$startDate]['customer_name'] = $customerName;
+                    $mergedArray[$startDate]['category'] = $category;
+                    $mergedArray[$startDate]['status'] = $status;
+                    $mergedArray[$startDate]['priority'] = $priority;
+                    $mergedArray[$startDate]['description'] = 'Maintenance '.$description;
+                    $mergedArray[$startDate]['duration'] = $duration;
+                    $mergedArray[$startDate]['tasks'][] = [
+                        'description' => $description,
+                        'is_completed' => false,
+                    ];
+                }
+            }
+
         }
 
         $mergedArray = array_values($mergedArray);
