@@ -145,7 +145,7 @@ class FileUploadController extends Controller
                     ];
             }else{
                 if (isset($mergedArray[$startDate])) {
-                    $mergedArray[$startDate]['description'] .= '\n Maintenance: ' . $description;
+                    $mergedArray[$startDate]['description'] .= '\\n Maintenance: ' . $description;
                     $mergedArray[$startDate]['duration'] += $duration;
                     $mergedArray[$startDate]['tasks'][] = [
                         'description' => $description,
