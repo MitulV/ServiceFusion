@@ -50,7 +50,6 @@ class FileUploadController extends Controller
         $contractJobs=json_decode($data['contract_jobs'],true);
         $customerName=json_decode($data['customer_name'],true);
         unset($internalJobs['total hours']);
-
         $accessToken=$this->refreshAccessToken($request);
 
         $this->internalJobFunction($internalJobs,$customerName,$accessToken);
@@ -91,13 +90,14 @@ class FileUploadController extends Controller
     
     public function internalJobFunction($internalJobs,$customerName,$accessToken){
         $finalInternalJobs=[];
+       
         foreach ($internalJobs as $key => $job) {
             if($job=="no jobs scheduled"){
                 continue;    
             }
 
             $noOfJobs=count($job['task category']);
-
+            
             for ($i=0; $i < $noOfJobs; $i++) { 
 
                 $obj['customer_name']="Sanay Patel Test";//$customerName
@@ -113,6 +113,7 @@ class FileUploadController extends Controller
                 array_push($finalInternalJobs,$obj);
             }
         }
+        
         $this->postJobs($this->splitInternalArray($finalInternalJobs),$accessToken);
     }
 
@@ -172,7 +173,6 @@ class FileUploadController extends Controller
     }
 
     public function postJobs(Array $jobs,$accessToken){ 
-     
         foreach ($jobs as $job) {
             $job['duration']=(int)$job['duration'];
             $response=Http::withToken($accessToken)->post('https://api.servicefusion.com/v1/jobs', $job);
