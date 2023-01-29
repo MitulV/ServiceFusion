@@ -48,6 +48,8 @@ class FileUploadController extends Controller
         ]);
 
         $data=json_decode($response,true);
+        
+        dd($data);
 
         $internalJobs=json_decode($data['internal_jobs'],true);
         $contractJobs=json_decode($data['contract_jobs'],true);
