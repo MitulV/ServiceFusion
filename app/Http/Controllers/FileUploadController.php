@@ -144,7 +144,7 @@ class FileUploadController extends Controller
                     ];
             }else{
                 if (isset($mergedArray[$startDate])) {
-                    $mergedArray[$startDate]['description'] .= '; Maintenance ' . $description;
+                    $mergedArray[$startDate]['description'] .= '\n Maintenance: ' . $description;
                     $mergedArray[$startDate]['duration'] += $duration;
                     $mergedArray[$startDate]['tasks'][] = [
                         'description' => $description,
@@ -156,7 +156,7 @@ class FileUploadController extends Controller
                     $mergedArray[$startDate]['category'] = $category;
                     $mergedArray[$startDate]['status'] = $status;
                     $mergedArray[$startDate]['priority'] = $priority;
-                    $mergedArray[$startDate]['description'] = 'Maintenance '.$description;
+                    $mergedArray[$startDate]['description'] = 'Maintenance: '.$description;
                     $mergedArray[$startDate]['duration'] = $duration;
                     $mergedArray[$startDate]['tasks'][] = [
                         'description' => $description,
@@ -172,7 +172,7 @@ class FileUploadController extends Controller
     }
 
     public function postJobs(Array $jobs,$accessToken){ 
-      dd($jobs);
+     
         foreach ($jobs as $job) {
             $job['duration']=(int)$job['duration'];
             $response=Http::withToken($accessToken)->post('https://api.servicefusion.com/v1/jobs', $job);
