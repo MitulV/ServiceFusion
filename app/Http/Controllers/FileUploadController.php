@@ -51,17 +51,15 @@ class FileUploadController extends Controller
         $customerName=json_decode($data['customer_name'],true);
         unset($internalJobs['total hours']);
         $accessToken=$this->refreshAccessToken($request);
-
         $this->internalJobFunction($internalJobs,$customerName,$accessToken);
 
-        //$this->contractJobFunction($contractJobs,$customerName,$accessToken);
+        $this->contractJobFunction($contractJobs,$customerName,$accessToken);
 
         return back()->with('success', 'All Jobs Scheduled Successfully');
 
     }
 
     public function contractJobFunction($contractJobs,$customerName,$accessToken){
-        dd($contractJobs);
         $finalContractJobs=[];
         foreach ($contractJobs as $key => $job) {
             if($job=="no jobs scheduled" || $job['task service']==""){
@@ -70,22 +68,26 @@ class FileUploadController extends Controller
             
             $noOfJobs=count($job['task category']);
 
-            for ($i=0; $i < $noOfJobs; $i++) { 
+            for ($i=0; $i < $noOfJobs; $i++) {
+                if($job['task category']=='landscaping' || $job['task category']=='pest control' || $job['task category']=='pool maintenance'){
+                    continue;
+                } 
                 $obj['customer_name']="Sanay Patel Test";//$customerName
                 $obj['category']="Recurring Maintenance";
                 $obj['status']="Unscheduled";
                 $obj['priority']="Normal";
-                $obj['description']=$job['task service'][$i];
+                $obj['description']='Maintenance: '.$job['task service'][$i];
                 
                 $currentYear = Carbon::now()->year;
-                $date = Carbon::createFromFormat('F d', $key." 30");
+                $date = Carbon::createFromFormat('F d', $job['date'][$i]);
                 $obj['start_date']=$date->year($currentYear)->format('Y-m-d');
+                array_push($finalContractJobs,$obj);
                
-                //$response = Http::withToken($accessToken)->post('https://api.servicefusion.com/v1/jobs', $obj);
                 //dd($response->getBody()->getContents());
                
             }
         }
+        $this->postJobs($finalContractJobs,$accessToken);
     }
     
     public function internalJobFunction($internalJobs,$customerName,$accessToken){
@@ -174,7 +176,10 @@ class FileUploadController extends Controller
 
     public function postJobs(Array $jobs,$accessToken){ 
         foreach ($jobs as $job) {
-            $job['duration']=(int)$job['duration'];
+            if(isset($job['duration'])){
+                $job['duration']=$job['duration'] * 60 * 60;
+            }
+            
             $response=Http::withToken($accessToken)->post('https://api.servicefusion.com/v1/jobs', $job);
         }     
     }
