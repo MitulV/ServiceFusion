@@ -77,7 +77,7 @@ class FileUploadController extends Controller
                 $obj['status']="Unscheduled";
                 $obj['priority']="Normal";
                 $obj['description']='Maintenance: '.$job['task service'][$i];
-                
+        
                 $currentYear = Carbon::now()->year;
                 $date = Carbon::createFromFormat('F d', $job['date'][$i]);
                 $obj['start_date']=$date->year($currentYear)->format('Y-m-d');
@@ -168,9 +168,34 @@ class FileUploadController extends Controller
                 }
             }
 
-        }
+            
 
+        }
+        
+        foreach ($mergedArray as $key => $value) {
+            $tasks=$value['tasks'];
+            array_push($tasks,[
+                'description' => 'Was work completed or is additional work needed?',
+                'is_completed' => false,
+            ],
+            [
+                'description' => 'Note time you spent and any product expenses',
+                'is_completed' => false,
+            ],
+            [
+                'description' => 'Anything new discovered or mentioned by member',
+                'is_completed' => false,
+            ],
+            [
+                'description' => 'Add pre and post photos',
+                'is_completed' => false,
+            ]);
+            
+            $mergedArray[$key]['tasks']=$tasks;
+        }
+        
         $mergedArray = array_values($mergedArray);
+        
         return $mergedArray;
     }
 
