@@ -147,7 +147,7 @@ class FileUploadController extends Controller
                     ];
             }else{
                 if (isset($mergedArray[$startDate])) {
-                    $mergedArray[$startDate]['description'] .= '\\n Maintenance: ' . $description;
+                    $mergedArray[$startDate]['description'] .= ' chr(13) Maintenance: ' . $description;
                     $mergedArray[$startDate]['duration'] += $duration;
                     $mergedArray[$startDate]['tasks'][] = [
                         'description' => $description,
@@ -200,6 +200,7 @@ class FileUploadController extends Controller
     }
 
     public function postJobs(Array $jobs,$accessToken){ 
+        dd($jobs);
         foreach ($jobs as $job) {
             if(isset($job['duration'])){
                 $job['duration']=$job['duration'] * 60 * 60;
