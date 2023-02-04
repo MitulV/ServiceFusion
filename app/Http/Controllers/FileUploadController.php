@@ -200,7 +200,6 @@ class FileUploadController extends Controller
     }
 
     public function postJobs(Array $jobs,$accessToken){ 
-        dd($jobs);
         foreach ($jobs as $job) {
             if(isset($job['duration'])){
                 $job['duration']=$job['duration'] * 60 * 60;
