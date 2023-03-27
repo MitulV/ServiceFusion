@@ -53,43 +53,59 @@
                 @else
                     <span class="cmnfont">Arrival Time Window: -</span>
                 @endif
-                <span class="cmnfont">{{$job['description']}}</span><br>
-        </div><br>
-        @endforeach  
-    @endif        
-     
-        <div style="border-bottom: 1px solid black;padding: 0px;">
-            <b class="cmnfont" style="font-size:20px;">OPEN ESTIMATES</b>
-        </div>
-        <p class="cmnfont" style="margin-top: 0px;">Please find below a summary of your open estimates at this time.</p>
+                <span class="cmnfont">{{$job['description']}}</span><br><br>
 
-        @if (empty($estimates))
-            <h3 class="cmnfont" style="color: red;">There are no open estimates at this time.</h3>
-        @else
-            @foreach ($estimates as $estimate)
-                <div>
-                <b class="cmnfont">{{$estimate['description']}}</b><br>
-                Value: ${{number_format($estimate['total'],2)}}<br>
-                Status: {{$estimate['status']}}
-                </div><br>
-            @endforeach
-        @endif  
+                @foreach ($job['visits'] as $visit)
+                    <div>
+                        <b class="cmnfont"><u>{{Carbon\Carbon::parse($visit['start_date'])->format('l, F d, Y') }}</u></b><br>
+                        <b class="cmnfont">This is a return visit</b><br>
+                        @if ($visit['time_frame_promised_start']!=null && $visit['time_frame_promised_end']!=null)
+                            <span class="cmnfont">Arrival Time Window: {{Carbon\Carbon::parse($visit['time_frame_promised_start'])->format('g:i A')}} to {{Carbon\Carbon::parse($visit['time_frame_promised_end'])->format('g:i A')}}</span><br>    
+                        @else
+                            <span class="cmnfont">Arrival Time Window: -</span>
+                        @endif
+                        <span class="cmnfont">{{$visit['notes_for_techs']}}</span><br>
+                    </div><br>
+                @endforeach
+
+        </div><br>
+        @endforeach
         
-        <p class="cmnfont">As always, we appreciate and value your business.  Have a wonderful weekend.</p>
+    @endif
+    <br>
+     
+    <div style="border-bottom: 1px solid black;padding: 0px;">
+        <b class="cmnfont" style="font-size:20px;">OPEN ESTIMATES</b>
+    </div>
+    <p class="cmnfont" style="margin-top: 0px;">Please find below a summary of your open estimates at this time.</p>
+
+    @if (empty($estimates))
+        <h3 class="cmnfont" style="color: red;">There are no open estimates at this time.</h3>
+    @else
+        @foreach ($estimates as $estimate)
+            <div>
+            <b class="cmnfont">{{$estimate['description']}}</b><br>
+            Value: ${{number_format($estimate['total'],2)}}<br>
+            Status: {{$estimate['status']}}
+            </div><br>
+        @endforeach
+    @endif  
         
-        <span class="cmnfontwithStyle">Best Regards,</span><br>
-        @if (strcasecmp($agent,"Brian Furnas")==0)
-            <b class="cmnfont">{{strtolower($agent)}}</b><br>
-            <b class="cmnfont">Home Manager</b><br>
-            <span class="cmnfont">Mobile: 919.332.3564</span><br>
-            <b class="cmnfont"><a href="mailto:brian@exhaleathome.com">brian@exhaleathome.com</a></b><br>
-            <b class="cmnfont"><a href="https://exhaleathome.com/">exhaleathome.com</a></b><br>
-        @else
-            <b class="cmnfont">{{strtolower($agent)}}</b><br>
-            <b class="cmnfont">Home Manager</b><br>
-            <span class="cmnfont">Mobile: 336.705.4865</span><br>
-            <b class="cmnfont"><a href="mailto:phoebe@exhaleathome.com">phoebe@exhaleathome.com</a></b><br>
-            <b class="cmnfont"><a href="https://exhaleathome.com">exhaleathome.com</a></b><br>
-        @endif
+    <p class="cmnfont">As always, we appreciate and value your business.  Have a wonderful weekend.</p>
+    
+    <span class="cmnfontwithStyle">Best Regards,</span><br>
+    @if (strcasecmp($agent,"Brian Furnas")==0)
+        <b class="cmnfont">{{strtolower($agent)}}</b><br>
+        <b class="cmnfont">Home Manager</b><br>
+        <span class="cmnfont">Mobile: 919.332.3564</span><br>
+        <b class="cmnfont"><a href="mailto:brian@exhaleathome.com">brian@exhaleathome.com</a></b><br>
+        <b class="cmnfont"><a href="https://exhaleathome.com/">exhaleathome.com</a></b><br>
+    @else
+        <b class="cmnfont">{{strtolower($agent)}}</b><br>
+        <b class="cmnfont">Home Manager</b><br>
+        <span class="cmnfont">Mobile: 336.705.4865</span><br>
+        <b class="cmnfont"><a href="mailto:phoebe@exhaleathome.com">phoebe@exhaleathome.com</a></b><br>
+        <b class="cmnfont"><a href="https://exhaleathome.com">exhaleathome.com</a></b><br>
+    @endif
 </body>
 </html>
