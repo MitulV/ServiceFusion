@@ -7,9 +7,11 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 use App\Core\CommonUtil;
+use App\Mail\ScheduledJobsReport;
 use App\Models\SFToken;
 use Rap2hpoutre\FastExcel\FastExcel;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class FileUploadController extends Controller
 {
@@ -55,46 +57,17 @@ class FileUploadController extends Controller
         $accessToken=$this->refreshAccessToken($request);
         
         $internalRes=$this->internalJobFunction($internalJobs,$customerName,$accessToken);
-
+       
         $contractRes=$this->contractJobFunction($contractJobs,$customerName,$accessToken);
         
-       
 
-    $csvArray=[];
-   $i=1;
-    foreach ($internalRes as $value) { 
-            $csvArray[$i]['Job Type']='Internal';            
-            foreach ($value as $k => $v) {
-                if($k!='tasks' && $k!='response' && $k!='duration'){
-                    $csvArray[$i][$k]=$v;
-                }
-            }
-            $i++;
-    }
-
-    foreach ($contractRes as $value) {
-        $csvArray[$i]['Job Type']='Contract';            
-            foreach ($value as $k => $v) {
-                if($k!='tasks' && $k!='response' && $k!='duration'){
-                    $csvArray[$i][$k]=$v;
-                }
-            }
-            $i++;
-    }
-
-
-        $fileName = time().'.'.$request->file('file')->extension(); 
-        $filePath=(new FastExcel($csvArray))->export(storage_path('app/xlsx/'.$fileName));
-        $headers = ['Content-Type: application/xlsx'];
-    	        
-        return response()->download($filePath, $fileName, $headers);
-
+        // Code For Sending Summery Email << === START === >>
         $failedjobs=[];
         $totalInternal=count($internalRes);
         $internalSuccess=0;
         $internalFail=0;
         foreach ($internalRes as $internal) {
-            if($internal['response_status']=='success'){
+            if($internal['response_status']=='successfully created'){
                 $internalSuccess+=1;
             }else{
                 //dd(($internal['response'])->getBody()->getContents());
@@ -110,7 +83,7 @@ class FileUploadController extends Controller
         $contractSuccess=0;
         $contractFail=0;
         foreach ($contractRes as $contract) {
-            if($contract['response_status']=='success'){
+            if($contract['response_status']=='successfully created'){
                 $contractSuccess+=1;
             }else{
                 $contract['Job Type']='Contract';
@@ -119,20 +92,50 @@ class FileUploadController extends Controller
             }
         }
 
-        // Here you will get list of failed jobs with $failedjobs variable.
+            $reportData=[
+            'total_jobs'=>$totalInternal+$totalContract,
+            'total_internal_jobs'=>$totalInternal,
+            'internal_successfully_scheduled_jobs'=>$internalSuccess,
+            'internal_failed_scheduled_jobs'=>$internalFail,
+            'total_contract_jobs'=>$totalContract,
+            'contract_successfully_scheduled_jobs'=>$contractSuccess,
+            'contract_failed_scheduled_jobs'=>$contractFail];
 
-        $reportData=[
-            'Total Jobs'=>$totalInternal+$totalContract,
-            'Total Internal Jobs'=>$totalInternal,
-            'Internal Successfully scheduled jobs'=>$internalSuccess,
-            'Internal Failed scheduled jobs'=>$internalFail,
-            'Total Contract Jobs'=>$totalContract,
-            'Contract Successfully scheduled jobs'=>$contractSuccess,
-            'Contract Failed scheduled jobs'=>$contractFail];
+            Mail::mailer('smtp')->to(['kinjal@exhaleathome.com'])->send(new ScheduledJobsReport($reportData));        
 
-            dd($reportData);
+       // Code For Sending Summery Email << === END === >>
 
-        return back()->with('success', 'All Jobs Scheduled Successfully');
+
+       // Code For Downloading CSV with Summery << === START === >>
+        $csvArray=[];
+        $i=1;
+        foreach ($internalRes as $value) { 
+                $csvArray[$i]['Job Type']='Internal';            
+                foreach ($value as $k => $v) {
+                    if($k!='tasks' && $k!='response' && $k!='duration'){
+                        $csvArray[$i][$k]=$v;
+                    }
+                }
+                $i++;
+        }
+
+        foreach ($contractRes as $value) {
+            $csvArray[$i]['Job Type']='Contract';            
+                foreach ($value as $k => $v) {
+                    if($k!='tasks' && $k!='response' && $k!='duration'){
+                        $csvArray[$i][$k]=$v;
+                    }
+                }
+                $i++;
+        }
+
+        $fileName = time().'.'.$request->file('file')->extension(); 
+        $filePath=(new FastExcel($csvArray))->export(storage_path('app/xlsx/'.$fileName));
+        $headers = ['Content-Type: application/xlsx'];
+    	        
+        return response()->download($filePath, $fileName, $headers);
+
+        // Code For Downloading CSV with Summery << === END === >>
 
     }
 
@@ -283,9 +286,9 @@ class FileUploadController extends Controller
             
             $job['response']=$res;
             if ($res->getStatusCode() >= 200 && $res->getStatusCode() < 300) {
-                $job['Response_status']='successfully created';
+                $job['response_status']='successfully created';
             } else {
-                $job['Response_status']='failed';
+                $job['response_status']='failed';
             }
             array_push($response,$job);
         }    
