@@ -215,7 +215,7 @@ class FileUploadController extends Controller
                     $mergedArray[$startDate]['category'] = $category;
                     $mergedArray[$startDate]['status'] = $status;
                     $mergedArray[$startDate]['priority'] = $priority;
-                    $mergedArray[$startDate]['description'] = 'Maintenance '.$description;
+                    $mergedArray[$startDate]['description'] = chr(13) . 'Maintenance '.$description;
                     $mergedArray[$startDate]['duration'] = $duration;
                     $mergedArray[$startDate]['tasks'][] = [
                         'description' => $description,
@@ -224,7 +224,7 @@ class FileUploadController extends Controller
                     $mergedArray[$startDate]['start_date'] = $startDate;
             }else{
                 if (isset($mergedArray[$startDate])) {
-                    $mergedArray[$startDate]['description'] .= ' chr(13) Maintenance: ' . $description;
+                    $mergedArray[$startDate]['description'] .= chr(13) . 'Maintenance: ' . $description;
                     $mergedArray[$startDate]['duration'] += $duration;
                     $mergedArray[$startDate]['tasks'][] = [
                         'description' => $description,
@@ -236,7 +236,7 @@ class FileUploadController extends Controller
                     $mergedArray[$startDate]['category'] = $category;
                     $mergedArray[$startDate]['status'] = $status;
                     $mergedArray[$startDate]['priority'] = $priority;
-                    $mergedArray[$startDate]['description'] = 'Maintenance: '.$description;
+                    $mergedArray[$startDate]['description'] = chr(13) . 'Maintenance: '.$description;
                     $mergedArray[$startDate]['duration'] = $duration;
                     $mergedArray[$startDate]['tasks'][] = [
                         'description' => $description,

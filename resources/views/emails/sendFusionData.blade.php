@@ -38,8 +38,8 @@
     <div style="border-bottom: 1px solid black;padding: 0px;">
         <b class="cmnfont" style="font-size:20px;">SCHEDULED SERVICES</b>
     </div>
-     <p class="cmnfont" style="margin-top: 0px;">Below is a summary of your scheduled services over the next month.
-        If we add any services, we will be sure to inform you. You will also receive an email reminder 48 hours prior to all scheduled services. Please note that pool maintenance and landscaping services, if applicable, are not listed, as those dates are tentative and may shift depending on weather and schedules. 
+    <p class="cmnfont" style="margin-top: 0px;">Below is a summary of your scheduled services over the next month.
+        If we add any services, we will be sure to inform you. You will also receive an email reminder 48 hours prior to all scheduled services. Please note that pool maintenance, pest control and landscaping services, if applicable, are not listed, as those dates are tentative and may shift depending on weather and schedules. 
     </p>
 
     @if (empty($jobs))
@@ -100,12 +100,12 @@
         <span class="cmnfont">Mobile: 919.332.3564</span><br>
         <b class="cmnfont"><a href="mailto:brian@exhaleathome.com">brian@exhaleathome.com</a></b><br>
         <b class="cmnfont"><a href="https://exhaleathome.com/">exhaleathome.com</a></b><br>
-    @else
-        <b class="cmnfont">{{strtolower($agent)}}</b><br>
-        <b class="cmnfont">Home Manager</b><br>
-        <span class="cmnfont">Mobile: 336.705.4865</span><br>
-        <b class="cmnfont"><a href="mailto:phoebe@exhaleathome.com">phoebe@exhaleathome.com</a></b><br>
-        <b class="cmnfont"><a href="https://exhaleathome.com">exhaleathome.com</a></b><br>
-    @endif
+        @else
+            <b class="cmnfont">{{strtolower($agent)}}</b><br>
+            <b class="cmnfont">Home Manager</b><br>
+            <span class="cmnfont">Mobile: 609.501.1206</span><br>
+            <b class="cmnfont"><a href="mailto:bill@exhaleathome.com">bill@exhaleathome.com</a></b><br>
+            <b class="cmnfont"><a href="https://exhaleathome.com">exhaleathome.com</a></b><br>
+        @endif
 </body>
 </html>

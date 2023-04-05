@@ -54,7 +54,7 @@ class HomeController extends Controller
                         $mondayURL=$field['value'];
                     }
                 }
-                if($field['name']=="1-Membership Start (Target/Actual)")
+                if($field['name']=="1-Membership Start (Target/Actual)" || $field['name']=="1-Membership Start")
                 {
                     if((Carbon::parse($field['value']))->lt(Carbon::now()))
                     {
@@ -169,7 +169,7 @@ class HomeController extends Controller
         if(strcasecmp($agent,"Brian Furnas")==0){
             $agentEmail="brian@exhaleathome.com";
         }else{
-            $agentEmail="phoebe@exhaleathome.com";
+            $agentEmail="bill@exhaleathome.com";
         }
 
         //Mail::to($email)->bcc(['kinjal@exhaleathome.com',$agentEmail])->send(new sendFusionData($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames,$agentEmail));    
