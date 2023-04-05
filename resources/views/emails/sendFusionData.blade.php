@@ -51,7 +51,7 @@
                 @if ($job['time_frame_promised_start']!=null && $job['time_frame_promised_end']!=null)
                     <span class="cmnfont">Arrival Time Window: {{Carbon\Carbon::parse($job['time_frame_promised_start'])->format('g:i A')}} to {{Carbon\Carbon::parse($job['time_frame_promised_end'])->format('g:i A')}}</span><br>    
                 @else
-                    <span class="cmnfont">Arrival Time Window: -</span>
+                    <span class="cmnfont">Arrival Time Window: -</span><br>
                 @endif
                 <span class="cmnfont">{{$job['description']}}</span><br><br>
 
@@ -62,7 +62,7 @@
                         @if ($visit['time_frame_promised_start']!=null && $visit['time_frame_promised_end']!=null)
                             <span class="cmnfont">Arrival Time Window: {{Carbon\Carbon::parse($visit['time_frame_promised_start'])->format('g:i A')}} to {{Carbon\Carbon::parse($visit['time_frame_promised_end'])->format('g:i A')}}</span><br>    
                         @else
-                            <span class="cmnfont">Arrival Time Window: -</span>
+                            <span class="cmnfont">Arrival Time Window: -</span><br>
                         @endif
                         <span class="cmnfont">{{$visit['notes_for_techs']}}</span><br>
                     </div><br>
