@@ -36,7 +36,7 @@ class HomeController extends Controller
     public function getCustomers(Request $request){
        
         $accessToken=$this->refreshAccessToken($request);
-        $url="https://api.servicefusion.com/v1/customers?per-page=8&filters[tags]=member&sort=-created_at&expand=contacts,contacts.emails,custom_fields"; 
+        $url="https://api.servicefusion.com/v1/customers?per-page=50&filters[tags]=member&sort=-created_at&expand=contacts,contacts.emails,custom_fields"; 
         $response=CommonUtil::callAPI($url,[],'GET',$accessToken); 
        
         foreach ($response['items'] as $customer) 
@@ -99,22 +99,28 @@ class HomeController extends Controller
     }
 
     public function getJobs($customerName,$email,$agent,$accessToken,$mondayURL,$fnames){
-        $lte=Carbon::now()->addDays(30)->toDateString(); 
-        $gte=Carbon::now()->toDateString();
+         $max=Carbon::now()->addDays(30)->toDateString(); 
+         $min=Carbon::now()->toDateString();
         
-        $url="https://api.servicefusion.com/v1/jobs?filters[customer_name]=$customerName&filters[start_date][lte]=$lte&filters[start_date][gte]=$gte&access_token=$accessToken&filters[status]=Scheduled&sort=start_date";
-        
-        // Needed to be deleted after test done and make requiered changes in above url
-        //$url ="https://api.servicefusion.com/v1/jobs?filters[number]=1013221271&expand=visits&access_token=$accessToken";
-        
+        $url="https://api.servicefusion.com/v1/jobs?filters[customer_name]=$customerName&access_token=$accessToken&filters[status]=Scheduled, Unscheduled, On The Way, Started, Paused, Resumed, Partially Completed, Service Completed, To Price, To Bill Member&sort=start_date&expand=visits";
         $response = json_decode(Http::get($url), true);    
         $jobs=$response && $response['items'] ? $response['items'] : [];
         $jobs_new=[];
        foreach($jobs as $job) { 
         if(!str_contains(strtolower($job['description']), 'credit')){
-            array_push($jobs_new,$job);
+            if(!empty($job['visits']) || ($min<=$job['visits'][0]['start_date']  && $job['visits'][0]['start_date'] <=$max)){
+                $job['start_date']=$job['visits'][0]['start_date'];
+                $job['time_frame_promised_start']=$job['visits'][0]['time_frame_promised_start'];
+                $job['time_frame_promised_end']=$job['visits'][0]['time_frame_promised_end'];
+                $job['is_return_visit']=true;
+                array_push($jobs_new,$job);
+            }else if($job['status']=='Scheduled'){
+                $job['is_return_visit']=false;
+                array_push($jobs_new,$job);
+            }
         }   
        }
+       
         $this->getEstimates($customerName,$email,$jobs_new,$agent,$accessToken,$mondayURL,$fnames);
     }
 
