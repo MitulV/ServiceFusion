@@ -99,16 +99,19 @@ class HomeController extends Controller
     }
 
     public function getJobs($customerName,$email,$agent,$accessToken,$mondayURL,$fnames){
-         $max=Carbon::now()->addDays(30)->toDateString(); 
-         $min=Carbon::now()->toDateString();
+         
+
+        $lte=Carbon::now()->addDays(30)->toDateString(); 
+        $gte=Carbon::now()->toDateString();
         
-        $url="https://api.servicefusion.com/v1/jobs?filters[customer_name]=$customerName&access_token=$accessToken&filters[status]=Scheduled, Unscheduled, On The Way, Started, Paused, Resumed, Partially Completed, Service Completed, To Price, To Bill Member&sort=start_date&expand=visits";
+        
+        $url="https://api.servicefusion.com/v1/jobs?filters[customer_name]=$customerName&filters[start_date][lte]=$lte&filters[start_date][gte]=$gte&access_token=$accessToken&filters[status]=Scheduled, Unscheduled, On The Way, Started, Paused, Resumed, Partially Completed, Service Completed, To Price, To Bill Member&sort=start_date&expand=visits";
         $response = json_decode(Http::get($url), true);    
         $jobs=$response && $response['items'] ? $response['items'] : [];
         $jobs_new=[];
        foreach($jobs as $job) { 
         if(!str_contains(strtolower($job['description']), 'credit')){
-            if(!empty($job['visits']) || ($min<=$job['visits'][0]['start_date']  && $job['visits'][0]['start_date'] <=$max)){
+            if(!empty($job['visits'])){
                 $job['start_date']=$job['visits'][0]['start_date'];
                 $job['time_frame_promised_start']=$job['visits'][0]['time_frame_promised_start'];
                 $job['time_frame_promised_end']=$job['visits'][0]['time_frame_promised_end'];
