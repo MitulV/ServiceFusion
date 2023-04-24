@@ -36,9 +36,9 @@ class HomeController extends Controller
     public function getCustomers(Request $request){
        
         $accessToken=$this->refreshAccessToken($request);
-        $url="https://api.servicefusion.com/v1/customers?per-page=8&filters[tags]=member&sort=-created_at&expand=contacts,contacts.emails,custom_fields"; 
+        
+        $url="https://api.servicefusion.com/v1/customers?per-page=20&page=3&filters[tags]=member&sort=-created_at&expand=contacts,contacts.emails,custom_fields"; 
         $response=CommonUtil::callAPI($url,[],'GET',$accessToken); 
-       
         foreach ($response['items'] as $customer) 
         {
             $sendFlag=false;
@@ -54,7 +54,7 @@ class HomeController extends Controller
                         $mondayURL=$field['value'];
                     }
                 }
-                if($field['name']=="1-Membership Start (Target/Actual)" || $field['name']=="1-Membership Start")
+                if($field['name']=="1-Membership Start (Target/Actual)" || $field['name']=="1-Membership Start" || $field['name']=="Membership Start")
                 {
                     if((Carbon::parse($field['value']))->lt(Carbon::now()))
                     {
@@ -79,7 +79,6 @@ class HomeController extends Controller
                 $fnames=$customer['contacts'][0]['fname'].", ".$customer['contacts'][1]['fname']." and ".$customer['contacts'][2]['fname'];
             }
 
-
             $email=[];
 
             foreach ($customer['contacts'] as $contact) {
@@ -103,9 +102,6 @@ class HomeController extends Controller
         $gte=Carbon::now()->toDateString();
         
         $url="https://api.servicefusion.com/v1/jobs?filters[customer_name]=$customerName&filters[start_date][lte]=$lte&filters[start_date][gte]=$gte&access_token=$accessToken&filters[status]=Scheduled&sort=start_date";
-        
-        // Needed to be deleted after test done and make requiered changes in above url
-        //$url ="https://api.servicefusion.com/v1/jobs?filters[number]=1013221271&expand=visits&access_token=$accessToken";
         
         $response = json_decode(Http::get($url), true);    
         $jobs=$response && $response['items'] ? $response['items'] : [];
@@ -136,49 +132,28 @@ class HomeController extends Controller
                 array_push($estimates_new,$estimate);
             }   
         }
-
-        $jobsNew=[];
-
-        foreach ($jobs as $job) {
-            $visits=$this->getReturnVisits($job,$accessToken);
-            $job['visits']=$visits;
-
-            array_push($jobsNew,$job);
-        }
-        
-        $this->sendEmail($customerName,$email,$jobsNew,$agent,$estimates_new,$mondayURL,$fnames);
-    }
-
-    public function getReturnVisits($job,$accessToken){        
-        
-        $visits=[];
-
-        $jobNumber=$job['number'];
-        $url="https://api.servicefusion.com/v1/jobs?filters[number]=$jobNumber&expand=visits&access_token=$accessToken";
-        $response = json_decode(Http::get($url), true);    
-        $jobsNew=$response && $response['items'] ? $response['items'] : [];
-
-        foreach ($jobsNew[0]['visits'] as $visit) {
-           array_push($visits,$visit);
-        } 
-        return $visits;
+        $this->sendEmail($customerName,$email,$jobs,$agent,$estimates_new,$mondayURL,$fnames);
     }
 
     public function sendEmail($customerName,$email,$jobs,$agent,$estimates,$mondayURL,$fnames){
         $agentEmail='';
+        $serviceEmail='';
         if(strcasecmp($agent,"Brian Furnas")==0){
             $agentEmail="brian@exhaleathome.com";
+            $serviceEmail="eboni@exhaleathome.com";
         }else{
             $agentEmail="bill@exhaleathome.com";
+            $serviceEmail="phoebe@exhaleathome.com";
         }
 
+            
         //Mail::to($email)->bcc(['kinjal@exhaleathome.com',$agentEmail])->send(new sendFusionData($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames,$agentEmail));    
     
         //For Live Temp
         if(strcasecmp($agent,"Brian Furnas")==0){
-            Mail::mailer('smtp')->to($email)->bcc(['kinjal@exhaleathome.com',$agentEmail])->send(new sendFusionData($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames,$agentEmail));    
+            Mail::mailer('smtp')->to($email)->bcc(['kinjal@exhaleathome.com',$agentEmail,$serviceEmail])->send(new sendFusionData($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames,$agentEmail));    
         }else{
-            Mail::mailer('smtp')->to($email)->bcc(['kinjal@exhaleathome.com',$agentEmail])->send(new sendFusionData($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames,$agentEmail));    
+            Mail::mailer('smtp')->to($email)->bcc(['kinjal@exhaleathome.com',$agentEmail,$serviceEmail])->send(new sendFusionData($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames,$agentEmail));    
         }
 
     }
