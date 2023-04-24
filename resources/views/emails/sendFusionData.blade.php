@@ -38,8 +38,8 @@
     <div style="border-bottom: 1px solid black;padding: 0px;">
         <b class="cmnfont" style="font-size:20px;">SCHEDULED SERVICES</b>
     </div>
-    <p class="cmnfont" style="margin-top: 0px;">Below is a summary of your scheduled services over the next month.
-        If we add any services, we will be sure to inform you. You will also receive an email reminder 48 hours prior to all scheduled services. Please note that pool maintenance, pest control and landscaping services, if applicable, are not listed, as those dates are tentative and may shift depending on weather and schedules. 
+     <p class="cmnfont" style="margin-top: 0px;">Below is a summary of your scheduled services over the next month.
+     If we add any services, we will be sure to inform you. You will also receive an email reminder 48 hours prior to all scheduled services. Please note that pool maintenance, pest control and landscaping services, if applicable, are not listed, as those dates are tentative and may shift depending on weather and schedules.
     </p>
 
     @if (empty($jobs))
@@ -51,55 +51,39 @@
                 @if ($job['time_frame_promised_start']!=null && $job['time_frame_promised_end']!=null)
                     <span class="cmnfont">Arrival Time Window: {{Carbon\Carbon::parse($job['time_frame_promised_start'])->format('g:i A')}} to {{Carbon\Carbon::parse($job['time_frame_promised_end'])->format('g:i A')}}</span><br>    
                 @else
-                    <span class="cmnfont">Arrival Time Window: -</span><br>
+                    <span class="cmnfont">Arrival Time Window: -</span>
                 @endif
-                <span class="cmnfont">{{$job['description']}}</span><br><br>
-
-                @foreach ($job['visits'] as $visit)
-                    <div>
-                        <b class="cmnfont"><u>{{Carbon\Carbon::parse($visit['start_date'])->format('l, F d, Y') }}</u></b><br>
-                        <b class="cmnfont">This is a return visit</b><br>
-                        @if ($visit['time_frame_promised_start']!=null && $visit['time_frame_promised_end']!=null)
-                            <span class="cmnfont">Arrival Time Window: {{Carbon\Carbon::parse($visit['time_frame_promised_start'])->format('g:i A')}} to {{Carbon\Carbon::parse($visit['time_frame_promised_end'])->format('g:i A')}}</span><br>    
-                        @else
-                            <span class="cmnfont">Arrival Time Window: -</span><br>
-                        @endif
-                        <span class="cmnfont">{{$visit['notes_for_techs']}}</span><br>
-                    </div><br>
-                @endforeach
-
+                <span class="cmnfont">{{$job['description']}}</span><br>
         </div><br>
-        @endforeach
-        
-    @endif
-    <br>
+        @endforeach  
+    @endif        
      
-    <div style="border-bottom: 1px solid black;padding: 0px;">
-        <b class="cmnfont" style="font-size:20px;">OPEN ESTIMATES</b>
-    </div>
-    <p class="cmnfont" style="margin-top: 0px;">Please find below a summary of your open estimates at this time.</p>
+        <div style="border-bottom: 1px solid black;padding: 0px;">
+            <b class="cmnfont" style="font-size:20px;">OPEN ESTIMATES</b>
+        </div>
+        <p class="cmnfont" style="margin-top: 0px;">Please find below a summary of your open estimates at this time.</p>
 
-    @if (empty($estimates))
-        <h3 class="cmnfont" style="color: red;">There are no open estimates at this time.</h3>
-    @else
-        @foreach ($estimates as $estimate)
-            <div>
-            <b class="cmnfont">{{$estimate['description']}}</b><br>
-            Value: ${{number_format($estimate['total'],2)}}<br>
-            Status: {{$estimate['status']}}
-            </div><br>
-        @endforeach
-    @endif  
+        @if (empty($estimates))
+            <h3 class="cmnfont" style="color: red;">There are no open estimates at this time.</h3>
+        @else
+            @foreach ($estimates as $estimate)
+                <div>
+                <b class="cmnfont">{{$estimate['description']}}</b><br>
+                Value: ${{number_format($estimate['total'],2)}}<br>
+                Status: {{$estimate['status']}}
+                </div><br>
+            @endforeach
+        @endif  
         
-    <p class="cmnfont">As always, we appreciate and value your business.  Have a wonderful weekend.</p>
-    
-    <span class="cmnfontwithStyle">Best Regards,</span><br>
-    @if (strcasecmp($agent,"Brian Furnas")==0)
-        <b class="cmnfont">{{strtolower($agent)}}</b><br>
-        <b class="cmnfont">Home Manager</b><br>
-        <span class="cmnfont">Mobile: 919.332.3564</span><br>
-        <b class="cmnfont"><a href="mailto:brian@exhaleathome.com">brian@exhaleathome.com</a></b><br>
-        <b class="cmnfont"><a href="https://exhaleathome.com/">exhaleathome.com</a></b><br>
+        <p class="cmnfont">As always, we appreciate and value your business.  Have a wonderful weekend.</p>
+        
+        <span class="cmnfontwithStyle">Best Regards,</span><br>
+        @if (strcasecmp($agent,"Brian Furnas")==0)
+            <b class="cmnfont">{{strtolower($agent)}}</b><br>
+            <b class="cmnfont">Home Manager</b><br>
+            <span class="cmnfont">Mobile: 919.332.3564</span><br>
+            <b class="cmnfont"><a href="mailto:brian@exhaleathome.com">brian@exhaleathome.com</a></b><br>
+            <b class="cmnfont"><a href="https://exhaleathome.com/">exhaleathome.com</a></b><br>
         @else
             <b class="cmnfont">{{strtolower($agent)}}</b><br>
             <b class="cmnfont">Home Manager</b><br>
