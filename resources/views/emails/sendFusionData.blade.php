@@ -48,7 +48,7 @@
         @foreach ($jobs as $job)
         <div>
                 <b class="cmnfont"><u>{{Carbon\Carbon::parse($job['start_date'])->format('l, F d, Y') }}</u></b><br>
-                @if($job['is_return_visit'])
+                @if(!empty($job['is_return_visit']) && $job['is_return_visit'])
                 <b class="cmnfont">This is a return visit</b><br>
                 @endif
                 @if ($job['time_frame_promised_start']!=null && $job['time_frame_promised_end']!=null)
