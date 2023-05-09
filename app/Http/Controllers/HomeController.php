@@ -108,7 +108,7 @@ class HomeController extends Controller
     $response = json_decode(Http::get($url), true);    
     $jobs=$response && $response['items'] ? $response['items'] : [];
 
-    $returnVisit_Url="https://api.servicefusion.com/v1/jobs?filters[customer_name]=$customerName&filters[status]=Scheduled, Partially Completed, Started&access_token=$accessToken&filters[start_date][lte]=$gte&expand=visits";
+    $returnVisit_Url="https://api.servicefusion.com/v1/jobs?filters[customer_name]=$customerName&filters[status]=Scheduled, Partially Completed, Started&access_token=$accessToken&filters[start_date][lte]=$gte&expand=visits&sort=start_date";
     $returnVisit_response = json_decode(Http::get($returnVisit_Url), true);
     $returnVisit_jobs=$returnVisit_response && $returnVisit_response['items'] ? $returnVisit_response['items'] : [];
    
@@ -135,9 +135,15 @@ class HomeController extends Controller
             }
        }
 
+    usort($jobs_new, function($a, $b) {
+        return strtotime($a['start_date']) - strtotime($b['start_date']);
+    });
+
+
     $this->getEstimates($customerName,$email,$jobs_new,$agent,$accessToken,$mondayURL,$fnames);
 
 }
+
 
     public function getEstimates($customerName,$email,$jobs,$agent,$accessToken,$mondayURL,$fnames){
         $url="https://api.servicefusion.com/v1/estimates?filters[customer_name]=$customerName&filters[status]=Estimate Provided&access_token=$accessToken&expand=printable_work_order";
