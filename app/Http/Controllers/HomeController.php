@@ -91,7 +91,7 @@ class HomeController extends Controller
             } 
             
             if($sendFlag){
-                // $customerName="Artis Beatty and Kade Kimber";
+                //$customerName="Sanay Patel";
                     $this->getJobs($customerName,$email,$agent,$accessToken,$mondayURL,$fnames); 
             }
              
@@ -122,11 +122,16 @@ class HomeController extends Controller
 
     foreach($returnVisit_jobs as $job) { 
             if(!empty($job['visits'])){
-                $job['start_date']=$job['visits'][0]['start_date'];
-                $job['time_frame_promised_start']=$job['visits'][0]['time_frame_promised_start'];
-                $job['time_frame_promised_end']=$job['visits'][0]['time_frame_promised_end'];
-                $job['is_return_visit']=true;
-                array_push($jobs_new,$job);
+                foreach($job['visits'] as $visit){
+                    if(Carbon::parse($visit['start_date']) >= $gte && Carbon::parse($visit['start_date']) < $lte)
+                    {
+                        $job['start_date']=$visit['start_date'];
+                        $job['time_frame_promised_start']=$visit['time_frame_promised_start'];
+                        $job['time_frame_promised_end']=$visit['time_frame_promised_end'];
+                        $job['is_return_visit']=true;
+                        array_push($jobs_new,$job);
+                    }
+                }
             }
        }
 
@@ -178,3 +183,4 @@ class HomeController extends Controller
 
     }
 }
+ 
