@@ -139,54 +139,65 @@ class HomeController extends Controller
         return strtotime($a['start_date']) - strtotime($b['start_date']);
     });
 
-
     $this->getEstimates($customerName,$email,$jobs_new,$agent,$accessToken,$mondayURL,$fnames);
 
 }
 
+public function lastWeekServices($customerName,$accessToken){
+    $min=Carbon::now()->subDays(7)->toDateString(); 
+    $max=Carbon::now()->toDateString();
+    
+    $url="https://api.servicefusion.com/v1/jobs?filters[customer_name]=$customerName&filters[start_date][lte]=$max&filters[start_date][gte]=$min&access_token=$accessToken&filters[status]=Service Completed, To Price, Bill Member&sort=start_date";
+    $response = json_decode(Http::get($url), true);    
+    $jobs=$response && $response['items'] ? $response['items'] : [];
 
-    public function getEstimates($customerName,$email,$jobs,$agent,$accessToken,$mondayURL,$fnames){
-        $url="https://api.servicefusion.com/v1/estimates?filters[customer_name]=$customerName&filters[status]=Estimate Provided&access_token=$accessToken&expand=printable_work_order";
-        $response = json_decode(Http::get($url), true); 
-        $estimates=$response && $response['items'] ? $response['items'] : [];
-        $estimates_new=[];
-        foreach($estimates as $estimate) 
-        { 
-            if(Carbon::parse($estimate['created_at'])->gt(Carbon::now()->subDays(365))){
-                $printWithRates='-';
-                foreach ($estimate['printable_work_order'] as $printRate) {
-                    if($printRate['name']=='Print With Rates'){
-                        $printWithRates=$printRate['url'];
-                    }
+    return $jobs;
+}
+
+
+public function getEstimates($customerName,$email,$jobs,$agent,$accessToken,$mondayURL,$fnames){
+    $url="https://api.servicefusion.com/v1/estimates?filters[customer_name]=$customerName&filters[status]=Estimate Provided&access_token=$accessToken&expand=printable_work_order";
+    $response = json_decode(Http::get($url), true); 
+    $estimates=$response && $response['items'] ? $response['items'] : [];
+    $estimates_new=[];
+    foreach($estimates as $estimate) 
+    { 
+        if(Carbon::parse($estimate['created_at'])->gt(Carbon::now()->subDays(365))){
+            $printWithRates='-';
+            foreach ($estimate['printable_work_order'] as $printRate) {
+                if($printRate['name']=='Print With Rates'){
+                    $printWithRates=$printRate['url'];
                 }
-                $estimate['printWithRates']=$printWithRates;
-                array_push($estimates_new,$estimate);
-            }   
-        }
-        
-        $this->sendEmail($customerName,$email,$jobs,$agent,$estimates_new,$mondayURL,$fnames);
+            }
+            $estimate['printWithRates']=$printWithRates;
+            array_push($estimates_new,$estimate);
+        }   
+    }
+    
+    $lastWeekServices=$this->lastWeekServices($customerName,$accessToken);
+    $this->sendEmail($customerName,$email,$jobs,$agent,$estimates_new,$mondayURL,$fnames,$lastWeekServices);
+}
+
+
+
+public function sendEmail($customerName,$email,$jobs,$agent,$estimates,$mondayURL,$fnames,$lastWeekServices){
+    $agentEmail='';
+    $serviceEmail='';
+    if(strcasecmp($agent,"Brian Furnas")==0){
+        $agentEmail="brian@exhaleathome.com";
+        $serviceEmail="eboni@exhaleathome.com";
+    }else{
+        $agentEmail="bill@exhaleathome.com";
+        $serviceEmail="phoebe@exhaleathome.com";
     }
 
-  
-
-    public function sendEmail($customerName,$email,$jobs,$agent,$estimates,$mondayURL,$fnames){
-        $agentEmail='';
-        $serviceEmail='';
-        if(strcasecmp($agent,"Brian Furnas")==0){
-            $agentEmail="brian@exhaleathome.com";
-            $serviceEmail="eboni@exhaleathome.com";
-        }else{
-            $agentEmail="bill@exhaleathome.com";
-            $serviceEmail="phoebe@exhaleathome.com";
-        }
-
-        //For Live Temp
-        if(strcasecmp($agent,"Brian Furnas")==0){
-            Mail::mailer('smtp')->to($email)->bcc(['kinjal@exhaleathome.com',$agentEmail,$serviceEmail])->send(new sendFusionData($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames,$agentEmail));    
-        }else{
-            Mail::mailer('smtp')->to($email)->bcc(['kinjal@exhaleathome.com',$agentEmail,$serviceEmail])->send(new sendFusionData($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames,$agentEmail));    
-        }
-
+    //For Live Temp
+    if(strcasecmp($agent,"Brian Furnas")==0){
+        Mail::mailer('smtp')->to($email)->bcc(['kinjal@exhaleathome.com',$agentEmail,$serviceEmail])->send(new sendFusionData($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames,$agentEmail,$lastWeekServices));    
+    }else{
+        Mail::mailer('smtp')->to($email)->bcc(['kinjal@exhaleathome.com',$agentEmail,$serviceEmail])->send(new sendFusionData($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames,$agentEmail,$lastWeekServices));    
     }
+
+}
 }
  

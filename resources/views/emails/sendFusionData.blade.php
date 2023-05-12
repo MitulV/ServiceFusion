@@ -54,7 +54,7 @@
                 @if ($job['time_frame_promised_start']!=null && $job['time_frame_promised_end']!=null)
                     <span class="cmnfont">Arrival Time Window: {{Carbon\Carbon::parse($job['time_frame_promised_start'])->format('g:i A')}} to {{Carbon\Carbon::parse($job['time_frame_promised_end'])->format('g:i A')}}</span><br>    
                 @else
-                    <span class="cmnfont">Arrival Time Window: -</span><br>
+                    <span class="cmnfont">Arrival Time Window: Not Set</span><br>
                 @endif
                 <span class="cmnfont">{{$job['description']}}</span><br><br>
         </div><br>
@@ -79,6 +79,33 @@
             </div><br>
         @endforeach
     @endif  
+
+    <div style="border-bottom: 1px solid black;padding: 0px;">
+        <b class="cmnfont" style="font-size:20px;">LAST WEEK COMPLETED SERVICES</b>
+    </div>
+    <p class="cmnfont" style="margin-top: 0px;">Below is a summary of your Completed services in last week. 
+    </p>
+
+    @if (empty($lastWeekServices))
+        <h3 class="cmnfont" style="color: red;">you do not have any completed service in last week.</h3>
+    @else
+        @foreach ($lastWeekServices as $job)
+        <div>
+                <b class="cmnfont"><u>{{Carbon\Carbon::parse($job['start_date'])->format('l, F d, Y') }}</u></b><br>
+                @if(!empty($job['is_return_visit']) && $job['is_return_visit'])
+                <b class="cmnfont">This is a return visit</b><br>
+                @endif
+                @if ($job['time_frame_promised_start']!=null && $job['time_frame_promised_end']!=null)
+                    <span class="cmnfont">Arrival Time Window: {{Carbon\Carbon::parse($job['time_frame_promised_start'])->format('g:i A')}} to {{Carbon\Carbon::parse($job['time_frame_promised_end'])->format('g:i A')}}</span><br>    
+                @else
+                    <span class="cmnfont">Arrival Time Window: Not Set</span><br>
+                @endif
+                <span class="cmnfont">{{$job['description']}}</span><br><br>
+        </div><br>
+        @endforeach
+        
+    @endif
+    <br>
         
     <p class="cmnfont">As always, we appreciate and value your business.  Have a wonderful weekend.</p>
     

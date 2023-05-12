@@ -13,13 +13,13 @@ use Illuminate\Mail\Mailables\Address;
 class sendFusionData extends Mailable
 {
     use Queueable, SerializesModels;
-    protected $customerName,$jobs,$estimates,$agent,$mondayURL,$fnames,$agentEmail;
+    protected $customerName,$jobs,$estimates,$agent,$mondayURL,$fnames,$agentEmail,$lastWeekServices;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames,$agentEmail)
+    public function __construct($customerName,$jobs,$estimates,$agent,$mondayURL,$fnames,$agentEmail,$lastWeekServices)
     {
         $this->customerName = $customerName;
         $this->jobs = $jobs;
@@ -28,6 +28,7 @@ class sendFusionData extends Mailable
         $this->mondayURL = $mondayURL;
         $this->fnames = $fnames;
         $this->agentEmail=$agentEmail;
+        $this->lastWeekServices=$lastWeekServices;
     }
 
 
@@ -59,7 +60,8 @@ class sendFusionData extends Mailable
                 'estimates'=>$this->estimates,
                 'agent'=> $this->agent,
                 'mondayURL'=>$this->mondayURL,
-                'fnames'=>$this->fnames
+                'fnames'=>$this->fnames,
+                'lastWeekServices'=>$this->lastWeekServices
             ],
         );
     }
