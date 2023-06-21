@@ -20,12 +20,12 @@
     <p class="cmnfont">Please find below your Exhale weekly service update.</p>
     
         
-    <div style="border-bottom: 1px solid black;padding: 0px;">
+    {{-- <div style="border-bottom: 1px solid black;padding: 0px;">
         <b class="cmnfont" style="font-size:20px;">FEEDBACK</b>
     </div>
         
     <p class="cmnfont" style="margin-top: 0px;">We’d love to know how we did this week and your feedback is crucial to our improvement: <a href="https://www.surveymonkey.com/r/DDX98WM">Exhale Feedback</a></p>
-    <br>
+    <br> --}}
     
     <div style="border-bottom: 1px solid black;padding: 0px;">
         <b class="cmnfont" style="font-size:20px;">RECENTLY COMPLETED SERVICES</b>
@@ -34,7 +34,7 @@
     </p>
 
     @if (empty($lastWeekServices))
-        <h3 class="cmnfont" style="color: red;">you do not have any completed service in last week.</h3>
+        <h3 class="cmnfont" style="color: red;">There were no recently completed services for you.</h3>
     @else
         @foreach ($lastWeekServices as $job)
         <div>
