@@ -107,16 +107,17 @@ class HomeController extends Controller
     $url="https://api.servicefusion.com/v1/jobs?filters[customer_name]=$customerName&filters[start_date][lte]=$lte&filters[start_date][gte]=$gte&access_token=$accessToken&filters[status]=Scheduled&sort=start_date";
     $response = json_decode(Http::get($url), true);    
     $jobs=$response && $response['items'] ? $response['items'] : [];
-
+        
     $returnVisit_Url="https://api.servicefusion.com/v1/jobs?filters[customer_name]=$customerName&filters[status]=Scheduled, Partially Completed, Started&access_token=$accessToken&filters[start_date][lte]=$gte&expand=visits&sort=start_date";
     $returnVisit_response = json_decode(Http::get($returnVisit_Url), true);
     $returnVisit_jobs=$returnVisit_response && $returnVisit_response['items'] ? $returnVisit_response['items'] : [];
    
     $jobs_new=[];
+    
     foreach($jobs as $job) 
     { 
         if(!str_contains(strtolower($job['description']), 'credit')){
-            array_push($jobs_new,$job);
+                    array_push($jobs_new,$job);
         }
     }
 
@@ -144,14 +145,29 @@ class HomeController extends Controller
 }
 
 public function lastWeekServices($customerName,$accessToken){
-    $min=Carbon::now()->subDays(7)->toDateString(); 
+    $min=Carbon::now()->subDays(10)->toDateString(); 
     $max=Carbon::now()->toDateString();
     
     $url="https://api.servicefusion.com/v1/jobs?filters[customer_name]=$customerName&filters[start_date][lte]=$max&filters[start_date][gte]=$min&access_token=$accessToken&filters[status]=Service Completed, To Price, Bill Member&sort=start_date";
     $response = json_decode(Http::get($url), true);    
     $jobs=$response && $response['items'] ? $response['items'] : [];
 
-    return $jobs;
+    $jobs_new=[];
+    
+    foreach($jobs as $job) 
+    { 
+        if(!str_contains(strtolower($job['description']), 'credit')){
+            if($job['time_frame_promised_start']!=null && $job['time_frame_promised_end']!=null){
+                if($job['category']!= 'Maintenance Services - only for showing on monthly invoice'
+                && $job['category']!='Maintenance Plan Fee'
+                && $job['category']!='Membership Fee'){
+                    array_push($jobs_new,$job);
+                }
+            }
+        }
+    }
+
+    return $jobs_new;
 }
 
 
