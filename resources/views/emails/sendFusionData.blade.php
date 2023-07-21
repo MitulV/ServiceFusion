@@ -34,7 +34,7 @@
     </p>
 
     @if (empty($lastWeekServices))
-        <h3 class="cmnfont" style="color: red;">There were no recently completed services for you.</h3>
+        <h3 class="cmnfont" style="color: #17ebce;">There were no recently completed services for you.</h3>
     @else
         @foreach ($lastWeekServices as $job)
         <div>
@@ -62,7 +62,7 @@
     </p>
 
     @if (empty($jobs))
-        <h3 class="cmnfont" style="color: red;">We currently do not have any jobs scheduled for next 30 days.</h3>
+        <h3 class="cmnfont" style="color: #17ebce;">We currently do not have any jobs scheduled for next 30 days.</h3>
     @else
         @foreach ($jobs as $job)
         <div>
@@ -98,20 +98,22 @@
     <p class="cmnfont" style="margin-top: 0px;">Please find below a summary of your open estimates at this time.</p>
 
     @if (empty($estimates))
-        <h3 class="cmnfont" style="color: red;">There are no open estimates at this time.</h3>
+        <h3 class="cmnfont" style="color: #17ebce;">There are no open estimates at this time.</h3>
     @else
         @foreach ($estimates as $estimate)
             <div>
             <b class="cmnfont">{{$estimate['description']}}</b><br>
             Value: ${{number_format($estimate['total'],2)}}<br>
             Status: {{$estimate['status']}}
+            <a href="https://exhaleathome.com/update-estimate?key=approve">Approve Estimate</a>
+            <a href="https://exhaleathome.com/update-estimate?key=reject">Reject Estimate</a>
             </div><br>
         @endforeach
     @endif 
         
     <p class="cmnfont">As always, we appreciate and value your business.  Have a wonderful weekend.</p>
     
-    <span class="cmnfontwithStyle">Best Regards,</span><br>
+    <span>Best Regards,</span><br>
     @if (strcasecmp($agent,"Brian Furnas")==0)
         <b class="cmnfont">{{strtolower($agent)}}</b><br>
         <b class="cmnfont">Home Manager</b><br>
