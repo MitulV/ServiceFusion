@@ -48,7 +48,11 @@
                     <span class="cmnfont">Arrival Time Window: Not Set</span><br>
                 @endif
                 <span class="cmnfont">{{$job['description']}}</span><br><br>
-        </div><br>
+        </div>
+        <h3 class="cmnfont" style="color: #1651d5;">
+            Please note that pool maintenance, pest control, and landscaping services, if applicable, are not listed, as those services are not scheduled through our system due to their dependence on weather and schedules". 
+        </h3>
+        <br>
         @endforeach
         
     @endif
@@ -62,7 +66,7 @@
     </p>
 
     @if (empty($jobs))
-        <h3 class="cmnfont" style="color: #17ebce;">We currently do not have any jobs scheduled for next 30 days.</h3>
+        <h3 class="cmnfont" style="color: #1651d5;">We currently do not have any jobs scheduled for next 30 days.</h3>
     @else
         @foreach ($jobs as $job)
         <div>
@@ -98,15 +102,15 @@
     <p class="cmnfont" style="margin-top: 0px;">Please find below a summary of your open estimates at this time.</p>
 
     @if (empty($estimates))
-        <h3 class="cmnfont" style="color: #17ebce;">There are no open estimates at this time.</h3>
+        <h3 class="cmnfont" style="color: #1651d5;">There are no open estimates at this time.</h3>
     @else
         @foreach ($estimates as $estimate)
             <div>
             <b class="cmnfont">{{$estimate['description']}}</b><br>
             Value: ${{number_format($estimate['total'],2)}}<br>
             Status: {{$estimate['status']}}
-            <a href="https://exhaleathome.com/update-estimate?key=approve">Approve Estimate</a>
-            <a href="https://exhaleathome.com/update-estimate?key=reject">Reject Estimate</a>
+            <a href="https://exhaleathome.com/update-estimate?status=approved&customer_name=$customerName">Approve Estimate</a>
+            <a href="https://exhaleathome.com/update-estimate?status=rejected">Reject Estimate</a>
             </div><br>
         @endforeach
     @endif 
